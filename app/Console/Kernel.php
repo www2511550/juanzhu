@@ -28,6 +28,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\DapeiBaiduYuanChuang::class,
 //        \App\Console\Commands\CatchHaodanku::class,
         \App\Console\Commands\CatchWzArticle::class,
+        \App\Console\Commands\CatchSalerData::class,
     ];
 
     /**
@@ -80,6 +81,9 @@ class Kernel extends ConsoleKernel
 
         // 微博定时发送
         $schedule->command('weibo:send')->cron('*/25 7-23,1 * * *')->withoutOverlapping()->appendOutputTo($filePath);
+
+        // 每天7：40抓去淘客网站商家信息
+        $schedule->command('catch:salerData')->dailyAt('7:40')->withoutOverlapping()->appendOutputTo($filePath);
 
     }
 

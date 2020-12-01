@@ -514,4 +514,21 @@ class IndexController extends BaseController{
         header('Location:'.$test);die;
     }
 
+    /**
+     * 淘礼金免单采集网-首发0元购免单
+     */
+    public function freeTaoLiJin()
+    {
+        return view('home.index.freeTaoLiJin');
+    }
+
+    /**
+     * 大淘客，好单裤商家、淘客联系方式数据
+     */
+    public function tkData()
+    {
+        $data = DB::table('saler_data')->orderBy('id', 'asc')->paginate(50);
+
+        return view('home.index.tkData', ['data' => $data]);
+    }
 }

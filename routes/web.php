@@ -23,6 +23,8 @@ Route::get('web/{type}', 'Home\IndexController@iframe');
 
 Route::get('wzads', 'Home\IndexController@wzAds'); // 网赚广告
 Route::get('ym/{id}.html', 'Dapei\IndexController@ym'); // 褥羊毛详情
+Route::get('free', 'Home\IndexController@freeTaoLiJin'); // 淘礼金免单集合
+Route::get('tkdata', 'Home\IndexController@tkData'); // 大淘客，好单裤商家、淘客联系方式数据
 
 
 // 短链接路由处理
