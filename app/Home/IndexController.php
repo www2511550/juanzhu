@@ -86,6 +86,9 @@ class IndexController extends BaseController{
      */
     public function index(Request $request, IndexLogic $indexLogic)
     {
+        return view('home.index.indexDtk'); // 大淘客替代
+
+
         // 1、获取商品分类和对应的字体图标
         $arrCate = Category::where('status', 1)->get();
         if ($arrCate) {
