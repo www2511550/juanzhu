@@ -29,10 +29,10 @@ class IndexController extends BaseController{
     {
         parent::__construct();
 
-        if(is_mobile() && !strpos(url()->current(), '/web/')){
+        // if(is_mobile() && !strpos(url()->current(), '/web/')){
 //            header("location:".url('/home/wap/index'));die;
-            header("location:http://coupon.juanzhuzhu.com/index.php?r=index/wap");die;
-        }
+        //   header("location:http://coupon.juanzhuzhu.com/index.php?r=index/wap");die;
+        // }
 
 //        $couponLogic = new CouponLogic();
 //        $arrId = $couponLogic->getCouponIdsBySphinx('女装');
@@ -80,14 +80,14 @@ class IndexController extends BaseController{
             return false;
         }
     }
-    
+
     /**
      * 首页
      */
     public function index(Request $request, IndexLogic $indexLogic)
     {
-        return view('home.index.indexDtk'); // 大淘客替代
 
+        return view('home.index.indexDtk'); // 大淘客替代
 
         // 1、获取商品分类和对应的字体图标
         $arrCate = Category::where('status', 1)->get();
@@ -108,7 +108,7 @@ class IndexController extends BaseController{
                 foreach ($result['ids'] as $id) {
                     $coupon = Coupon::find($id);
                     if (!$coupon->id) continue;
-                    
+
                     $data['data'][] = $coupon;
                 }
             }
