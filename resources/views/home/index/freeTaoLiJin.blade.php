@@ -72,10 +72,10 @@
 <div id="app">
     <ul class="layui-timeline">
         <li class="layui-timeline-item" v-for="(item,index) in data"><i class="layui-icon layui-timeline-axis"></i>
-            <div class="layui-timeline-content layui-text"><i class="layui-icon"></i> 发布时间：item.uploadtime*1000|dataFormat("yyyy-MM-dd hh:mm:ss")<br />
+            <div class="layui-timeline-content layui-text"><i class="layui-icon"></i> 发布时间： @{{ item.uploadtime*1000|dataFormat("yyyy-MM-dd hh:mm:ss") }}<br />
             <!--                <i class="layui-icon"></i> 礼金内容： <a target="_blank" v-bind:href="item.url">淘礼金首发Q群：3066310>>>>>item.text</a><br />-->
-                <i class="layui-icon"></i> 礼金内容： <a target="_blank" v-bind:href="item.url">>>>item.tkl</a><br />
-                <i class="layui-icon"></i> 淘口令：item.tkl<br />
+                <i class="layui-icon"></i> 礼金内容： <a target="_blank" v-bind:href="item.url">>>>@{{ item.text }}</a><br />
+                <i class="layui-icon"></i> 淘口令：@{{ item.tkl }}<br />
                 <a class="copycontent" href="javascript:;" style="color:#FF0000" v-bind:data-clipboard-text="item.tkl"><i class="layui-icon"></i> 点击复制淘口令 </a><br />
                 <a class="copycontent" href="javascript:;" style="color:#0000FF" v-bind:data-clipboard-text="item.url"><i class="layui-icon"></i> 点击复制淘礼金链接 </a></div>
         </li>
