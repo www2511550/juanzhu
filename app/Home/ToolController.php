@@ -549,7 +549,7 @@ class ToolController extends BaseController
             $url = $data['coupon_short_url'];
             $record = Url::where('long_md5', md5($url))->first();
             if ($record->id) {
-                $url = 'http://b.juanzhuzhu.com/' . $record->key;
+                $url = 'http://s.juanzhuzhu.com/' . $record->key;
             } else {
                 $strKey = substr(md5($url), -8);
                 $insertId = Url::insertGetId([
@@ -562,7 +562,7 @@ class ToolController extends BaseController
                     'created_at' => date('Y-m-d H:i:s'),
                 ]);
                 if ($insertId > 0) {
-                    $url = 'http://b.juanzhuzhu.com/' . $strKey;
+                    $url = 'http://s.juanzhuzhu.com/' . $strKey;
                 }
             }
         }

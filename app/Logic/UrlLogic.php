@@ -118,7 +118,7 @@ class UrlLogic
 
         $record = Url::where('long_md5', md5($longUrl))->first();
         $taobaoLogic = new TaobaoLogic();
-        $base_short_url =  strpos(request()->getHost(), '51wz.com.cn') ? 'http://s.51wz.com.cn/' : 'http://b.juanzhuzhu.com/';//'http://t6b.top/';
+        $base_short_url =  strpos(request()->getHost(), '51wz.com.cn') ? 'http://s.51wz.com.cn/' : 'http://s.juanzhuzhu.com/';//'http://t6b.top/';
         $coupon_img = 'http://juanzhuzhu.com/coupon.jpg';
 
         if ($record->id) {
