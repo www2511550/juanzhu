@@ -86,7 +86,6 @@ class IndexController extends BaseController{
      */
     public function index(Request $request, IndexLogic $indexLogic)
     {
-        exit('doing');
         return view('home.index.indexDtk'); // 大淘客替代
 
         // 1、获取商品分类和对应的字体图标
