@@ -86,7 +86,7 @@ class IndexController extends BaseController{
      */
     public function index(Request $request, IndexLogic $indexLogic)
     {
-
+        exit('doing');
         return view('home.index.indexDtk'); // 大淘客替代
 
         // 1、获取商品分类和对应的字体图标
@@ -533,5 +533,17 @@ class IndexController extends BaseController{
         $data = DB::table('saler_data')->orderBy('id', 'asc')->paginate(50);
 
         return view('home.index.tkData', ['data' => $data]);
+    }
+
+    /**
+     * 微信每日早报图片
+     */
+    public function zaobao()
+    {
+        $data = json_decode(file_get_contents('http://dwz.2xb.cn/zaob'), true);
+        if ($data['code'] == 200){
+            return '<img src="'.$data['imageUrl'].'" >';
+        }
+        return 'no img';
     }
 }
