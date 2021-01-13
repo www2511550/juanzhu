@@ -405,9 +405,91 @@ class IndexController extends BaseController{
     }
 
 
+    /**
+     * 免单信息
+     */
+    public function freeInfo(){
+        $url = 'http://dwz.2xb.cn/ljsjcj?page=1&pageSize=100';
+        $data = json_decode(file_get_contents($url), true);
+        return $data['data'] ?: [];
+    }
 
     public function test()
     {
+        $freeInfo = $this->freeInfo();
+        $str = '<p style="text-align: left"><img class="ue-image" src="{#ZC_BLOG_HOST#}zb_users/upload/2021/01/202101091610183022695403.png" title="免单logo.png" alt="免单logo.png"/></p>
+                <p><b style="color: palevioletred">'.date('m月d日').'0元免单活动已更新！！！</b>
+                <br/><b>没抢到的小伙伴建议加微信：juanzhujike</b></p>';
+        foreach ($freeInfo as $key=>$item) {
+            $str .= ('<p><a href="'.$item['url'].'" target="_blank">'.++$key.'、'.$item['text'].$item['tkl'].'</a></p>');
+        }
+        DB::connection('zblog')->table('post')->where('log_ID', 1)->update(['log_Content'=>$str, 'log_PostTime'=>time()]);
+        echo $str;die;
+
+        $db = DB::connection('zblog');
+        $record = $db->table('post')->where('log_ID', 3)->first();
+        $data = json_decode(file_get_contents('http://onsales.top/dtk.php?act=brandProudct&id='.$record->log_Meta), true);
+        $strGoods = '';
+        // 按照销量排序
+        $arrList = $data['data']['list'];
+        $arrTmpPrice = array();
+        foreach ($arrList as $value) {
+            $arrTmpPrice[] = $value['monthSales'];
+        }
+        array_multisort($arrTmpPrice, SORT_DESC, $arrList);
+//        pre($arrList);die;
+        foreach ($arrList as $value) {
+            // 获取单品优惠券
+            $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
+//            pre($coupon['data']);die;
+            $strGoods .= '<p><a href="' . $coupon['data']['couponClickUrl'] . '" target="_blank"><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></a></p>
+            <p><a href="' . $value['couponLink'] . '" target="_blank">【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '【复制口令：'.$coupon['data']['tpwd'].'】</a></p>';
+        }
+        $record->log_Content .= $strGoods;
+        $db->table('post')->where('log_ID', $record->log_ID)->update([
+            'log_Content' => $record->log_Content,
+        ]);
+        echo  'end';die;
+
+        // 品牌
+        $url = 'http://onsales.top/dtk.php?act=brandName';
+        $strJson = file_get_contents($url);
+        $data = json_decode($strJson, true);
+        $log_CateID = 3; // 品牌id
+        $hours = -6;
+        foreach ($data['data'] as $value){
+            $log_Title = $value['brandName'].'-'.$value['simpleLabel'];
+            $record = $db->table('post')->where('log_CateID', $log_CateID)->where('log_Title', $log_Title)->first();
+//            pre($value);
+//            pre($record);die;
+            $logCentent = '<p><img class="ue-image" src="' . $value['brandLogo'] . '" title="'.$value['brandName'].'.png" alt="'.$value['brandName'].'.png"/></p>';
+            $logCentent .= $value['brandDesc'];
+            if ($record){
+                pre($record->log_ID);
+                $db->table('post')->where('log_ID', $record->log_ID)->update([
+                    'log_Content' => $logCentent,
+                    'log_Meta' => $value['brandId'],
+                    'log_AuthorID' => 2,
+                    'log_ViewNums' => rand(1,100)
+                ]);
+            }else{
+                $hours -= 6;
+                $db->table('post')->insert([
+                    'log_CateID' => $log_CateID,
+                    'log_AuthorID' => 2,
+                    'log_Title' => $log_Title,
+                    'log_Intro' => $value['brandDesc'],
+                    'log_Content' => $logCentent,
+                    'log_PostTime' => strtotime(date("Y-m-d H:i:s", strtotime($hours." hours"))),
+                    'log_Meta' => $value['brandId'], // 大淘客品牌id
+                ]);
+            }
+        }
+
+        die;
+
+
+
         if($_GET['test']){
             phpinfo();die;
         }
