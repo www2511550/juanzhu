@@ -118,20 +118,22 @@ class UrlLogic
 
         $record = Url::where('long_md5', md5($longUrl))->first();
         $taobaoLogic = new TaobaoLogic();
-        $base_short_url =  strpos(request()->getHost(), '51wz.com.cn') ? 'http://s.51wz.com.cn/' : 'http://s.juanzhuzhu.com/';//'http://t6b.top/';
+        $base_short_url =  strpos(request()->getHost(), '51wz.com.cn') ? 's.51wz.com.cn/' : 's.juanzhuzhu.com/';//'http://t6b.top/';
         $coupon_img = 'http://juanzhuzhu.com/coupon.jpg';
 
+        $weiboLogic = new WeiboLogic();
         if ($record->id) {
             try{
                  // $strTkl = $taobaoLogic->taokouling($longUrl, '点我领购物券', $coupon_img, 1);
             }catch (\Exception $e){
                 $strTkl = '';
             }
+            $strUrl = $weiboLogic->shortUrl($base_short_url . $record->key, 'toTb');
             return [
                 'status' => 1,
                 'data' => [
 //                    'url' => route('url.go', ['url' => $record->key]),
-                    'url' => $base_short_url . $record->key,
+                    'url' => $strUrl,
                     'tkl' => $strTkl,
                     'short_url' => $longUrl,
                 ]
@@ -178,11 +180,12 @@ class UrlLogic
             }catch (\Exception $e){
                 $strTkl = '';
             }
+            $strUrl = $weiboLogic->shortUrl($base_short_url . $strKey, 'toTb');
             return [
                 'status' => 1,
                 'data' => [
 //                    'url' => route('url.go', ['url' => $strKey]),
-                    'url' => $base_short_url . $strKey,
+                    'url' => $strUrl,
                     'tkl' => $strTkl,
                     'short_url' => $longUrl,
                 ]

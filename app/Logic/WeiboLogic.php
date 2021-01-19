@@ -51,10 +51,20 @@ class WeiboLogic{
      * 生成微博短链接
      * @param $long_url
      */
-    public function shortUrl($long_url)
+    public function shortUrl($long_url, $type = '')
     {
-        $url = 'http://api.ft12.com/api.php?url='.urlencode($long_url);
-        $ft12 = http($url, []);
+        // 防微博屏蔽淘宝跳转
+        if ($type == 'toTb'){
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo%3A%2F%2Fbrowser%2Fclose%3Fscheme%3Dsinaweibo%253A%252F%252Fbrowser%253Furl%253Dhttp%25253A%25252F%25252F'.$long_url.'?%25252FPKUna0VG%2526allowRedirect%253D1%2526disable_sinaurl%253D1';
+        }else{
+            $long_url = urlencode($long_url);
+        }
+        $url = 'http://api.ft12.com/api.php';
+        $params = [
+            'url' => $long_url,
+            'apikey' => '18674221127@1c78d4115dca542fb187695500eb0cac'
+        ];
+        $ft12 = http($url, $params);
 
         return $ft12 ?: '';
 
