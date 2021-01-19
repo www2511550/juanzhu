@@ -43,6 +43,9 @@ class UrlController extends BaseController
             header('location:' . $toUrl);
             die;
         }
+        if ($key == '12345'){
+            return view('home.wap.wb');
+        }
         return view('home.wap.url');
     }
 
