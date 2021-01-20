@@ -44,9 +44,10 @@ class UrlController extends BaseController
             die;
         }
         if ($key == '12345'){
-            return view('home.wap.wb');
+            echo view('home.wap.wb');
+        }else{
+            return view('home.wap.url');
         }
-        return view('home.wap.url');
     }
 
     /**
@@ -288,10 +289,27 @@ class UrlController extends BaseController
 //            return $data;
 //        }
 
-        $url = 'http://api.vephp.com/hcapi?vekey=V00000836Y52123108&para=' . $strParam;
-        $result = http($url, []);
-        $result = json_decode($result, true);
-        $data = isset($result['data']) ? $result['data'] : [];
+        $url = 'http://open.ysdby.net/high/tb/api3';
+        $timestamp = time();
+        $appkey = '186NYLGM127';
+        $appsecret = 'NSHHMV2AQWK9F4DH';
+        $apptoken = md5($appkey.$appsecret.$timestamp).$timestamp;
+        $params = [
+            'appkey' => $appkey,
+            'apptoken' => $apptoken,
+            'tbName' => 'chengcong0520',
+            'pid' => 'mm_47800736_2189050294_111079800275',
+            'content' => $strParam,
+            'needShortUrl' => 1,
+            'needTkl' => 1
+        ];
+        $result = http($url, $params);
+        if($result){
+            $data = json_decode($result, true);
+            return ['coupon_short_url' => $data['data']['short_url']];
+        }else{
+            return [];
+        }
 
 //        Cache::put($strCacheKey, $data, 30 * 24 * 60);
 
