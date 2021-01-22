@@ -46,7 +46,7 @@ class Kernel extends ConsoleKernel
         //$schedule->command('weibo:send')->everyThirtyMinutes()->withoutOverlapping()->appendOutputTo($filePath);
 
         // 会员积分
-        $schedule->command('count:score_detail')->everyMinute()->withoutOverlapping()->appendOutputTo($filePath);
+        $schedule->command('blog:free')->everyMinute()->timezone('America/Chicago')->between('6:00','20:00')->withoutOverlapping()->appendOutputTo($filePath);
 
         // 执行allweb接口
         $schedule->command('coupon:allweb 1 40')->hourly()->withoutOverlapping()->appendOutputTo($filePath);
