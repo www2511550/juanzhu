@@ -29,6 +29,7 @@ class Kernel extends ConsoleKernel
 //        \App\Console\Commands\CatchHaodanku::class,
         \App\Console\Commands\CatchWzArticle::class,
         \App\Console\Commands\CatchSalerData::class,
+        \App\Console\Commands\BlogFree::class,
     ];
 
     /**
