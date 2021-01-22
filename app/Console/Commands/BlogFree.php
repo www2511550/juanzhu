@@ -44,10 +44,16 @@ class BlogFree extends Command
         $str = '<p style="text-align: left"><img class="ue-image" src="{#ZC_BLOG_HOST#}zb_users/upload/2021/01/202101211611237111679670.png" title="免单logo.png" alt="免单logo.png"/></p>
                 <p><b style="color: palevioletred">'.date('m月d日').'0元免单活动已更新！！！</b>
                 <br/><b>没抢到的小伙伴建议加微信：juanzhujike</b></p>';
+        $strBaidu = $str;
         foreach ($freeInfo as $key=>$item) {
-            $str .= ('<p>'.++$key.'、'.$item['text'].'<br>复制口令：<b>'.$item['tkl'].'</b></p>');
+            $strBaidu .= ('<p>'.++$key.'、'.$item['text'].'<br>复制口令：<b>'.$item['tkl'].'</b></p>');
+            $str .= ('<p><a href="'.$item['url'].'" target="_blank">'.++$key.'、'.$item['text'].$item['tkl'].'</a></p>');
         }
-        DB::connection('baiduMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$str, 'log_PostTime'=>time()]);
+
+        // 百度小程序嵌套页面用口令
+        DB::connection('baiduMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$strBaidu, 'log_PostTime'=>time()]);
+        // freeblog
+        DB::connection('freeMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$str, 'log_PostTime'=>time()]);
         echo date('Y-m-d H:i:s') . '_success_' . $this->description;
     }
 }
