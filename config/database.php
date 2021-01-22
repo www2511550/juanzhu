@@ -68,6 +68,48 @@ return [
             'engine' => null,
         ],
 
+        'baiduMysql' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'port' => '3306',
+            'database' => 'yhq',
+            'username' => 'root',
+            'password' => 'Aa2511550',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => 'yhq_',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'freeMysql' => [
+            'driver' => 'mysql',
+            'host' => 'localhost',
+            'port' => '3306',
+            'database' => 'free',
+            'username' => 'root',
+            'password' => 'Aa2511550',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => 'zbp_',
+            'strict' => true,
+            'engine' => null,
+        ],
+
+        'zblog' => [
+            'driver' => 'mysql',
+            'host' => 'sdm715222455.my3w.com',
+            'port' => '3306',
+            'database' => 'sdm715222455_db',
+            'username' => 'sdm715222455',
+            'password' => 'Aa2511550',
+            'charset' => 'utf8mb4',
+            'collation' => 'utf8mb4_unicode_ci',
+            'prefix' => 'zbp_',
+            'strict' => true,
+            'engine' => null,
+        ],
+
         'pgsql' => [
             'driver' => 'pgsql',
             'host' => env('DB_HOST', '127.0.0.1'),
