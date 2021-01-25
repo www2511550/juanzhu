@@ -30,6 +30,7 @@ class Kernel extends ConsoleKernel
         \App\Console\Commands\CatchWzArticle::class,
         \App\Console\Commands\CatchSalerData::class,
         \App\Console\Commands\BlogFree::class,
+        \App\Console\Commands\BrandCoupon::class,
     ];
 
     /**
@@ -85,6 +86,9 @@ class Kernel extends ConsoleKernel
 
         // 每天7：40抓去淘客网站商家信息
         $schedule->command('catch:salerData')->dailyAt('7:40')->withoutOverlapping()->appendOutputTo($filePath);
+
+        // 百度小程序品牌资讯更新
+        $schedule->command('brand:coupon')->dailyAt('6:00')->withoutOverlapping()->appendOutputTo($filePath);
 
     }
 
