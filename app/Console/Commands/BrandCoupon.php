@@ -56,7 +56,7 @@ class BrandCoupon extends Command
                 // 获取单品优惠券
                 $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
                 $strGoods .= '<p><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></p>
-            <p>【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '【复制口令：'.$coupon['data']['tpwd'].'】</p>';
+            <p>【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '</p>';
             }
 
 //            $strGoods .= '<p><a href="' . $coupon['data']['couponClickUrl'] . '" target="_blank"><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></a></p>

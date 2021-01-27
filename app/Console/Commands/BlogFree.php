@@ -47,7 +47,7 @@ class BlogFree extends Command
         $strBaidu = $strBase.'</p>';  // 百度小程序禁止有诱导加人
         foreach ($freeInfo as $key=>$item) {
             $num = ++$key;
-            $strBaidu .= ('<p>'.$num.'、'.$item['text'].'<br>复制口令：<b>'.$item['tkl'].'</b></p>');
+            $strBaidu .= ('<p>'.$num.'、'.$item['text'].'</p>');
             $str .= ('<p><a href="'.$item['url'].'" target="_blank">'.$num.'、'.$item['text'].$item['tkl'].'</a></p>');
         }
 
