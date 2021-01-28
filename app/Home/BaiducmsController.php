@@ -29,6 +29,8 @@ class BaiducmsController extends BaseController
                 'publish_date' => date('Y-m-d H:i', $value->log_PostTime),
             ];
         }
+        $data['data']['total'] = $paginate->total();
+        $data['data']['page'] = $paginate->currentPage();
         return $data;
     }
 
