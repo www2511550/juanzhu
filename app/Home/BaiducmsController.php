@@ -17,12 +17,15 @@ class BaiducmsController extends BaseController
     /**
      * 文章列表数据
      */
-    public function articleList()
+    public function articleList(Request $request)
     {
-        $data = ['msg' => '', 'code' => 1, 'url' => '', 'data'=>[]];
-        $paginate = DB::connection('baiduMysql')->table('post')->where('log_Status', 0)->paginate(10);
+        $cid = intval($request->get('cid'));
+        $data = ['msg' => '', 'code' => 1, 'url' => '', 'data' => []];
+        $objDb = DB::connection('baiduMysql')->table('post')->where('log_Status', 0);
+        $cid && $objDb->where('log_CateID', $cid);
+        $paginate = $objDb->paginate(10);
         foreach ($paginate as $value) {
-            preg_match('<img.*src=["](.*?)["].*?>',$value->log_Content,$match);
+            preg_match('<img.*src=["](.*?)["].*?>', $value->log_Content, $match);
             $data['data']['itemList'][] = [
                 'id' => $value->log_ID,
                 'firstImg' => $match[1] ?: 'http://juanzhuzhu.com/no-images.jpg',
@@ -40,15 +43,15 @@ class BaiducmsController extends BaseController
      */
     public function articleDetail(Request $request)
     {
-        $data = ['msg' => '', 'code' => 1, 'url' => '', 'data'=>[]];
+        $data = ['msg' => '', 'code' => 1, 'url' => '', 'data' => []];
         $id = intval($request->get('id'));
-        if (!$id){
+        if (!$id) {
             $data['code'] = 0;
             $data['msg'] = '文章不存在';
             return $data;
         }
         $record = DB::connection('baiduMysql')->table('post')->where('log_ID', $id)->first();
-        if ($record){
+        if ($record) {
             $data['data'] = [
                 'id' => $id,
                 'title' => $record->log_Title,
@@ -58,6 +61,26 @@ class BaiducmsController extends BaseController
                 'description' => $record->log_Intro
             ];
         }
+        return $data;
+    }
+
+    /**
+     * 获取分类数据
+     */
+    public function categoryList()
+    {
+        $data = ['msg' => 'ok', 'code' => 1, 'url' => '', 'data' => []];
+        $cateData = DB::connection('baiduMysql')->table('category')->orderBy('cate_Order', 'desc')->get();
+
+        foreach ($cateData as $value) {
+            $data['data']['categoryList'][] = [
+                'id' => $value->cate_ID,
+                'model_name' => $value->cate_Alias,
+                'title' => $value->cate_Name,
+                'content' => '',
+            ];
+        }
+
         return $data;
     }
 
