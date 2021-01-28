@@ -116,6 +116,7 @@ Route::group(['prefix' => 'bd','namespace' => 'Home'], function() {
     Route::match(['get', 'post'], '/article-list', 'BaiducmsController@articleList');
     Route::match(['get', 'post'], '/article-detail', 'BaiducmsController@articleDetail');
     Route::match(['get', 'post'], '/category-list', 'BaiducmsController@categoryList');
+    Route::match(['get', 'post'], '/site-info', 'BaiducmsController@siteInfo');
 
 });
 

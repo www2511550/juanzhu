@@ -84,4 +84,16 @@ class BaiducmsController extends BaseController
         return $data;
     }
 
+    /**
+     * 站点信息配置
+     */
+    public function siteInfo()
+    {
+        return ['msg' => 'ok', 'code' => 1, 'url' => '', 'data' => [
+            'siteName'=>'品牌优惠资讯','indexTitle'=>'一手品牌优惠资讯发布平台',
+            'keywords'=>'品牌优惠,品牌特惠,品牌优惠券,淘宝天猫内部优惠券',
+            'description' => '',
+        ]];
+    }
+
 }
