@@ -17,10 +17,12 @@
 
 
 Route::get('/', 'Home\IndexController@index');
+Route::get('test', 'Home\IndexController@test');
 Route::get('down', 'Home\WapController@down');
 Route::get('down/plan', 'Home\WapController@downPlan');
 Route::get('web/{type}', 'Home\IndexController@iframe');
 
+Route::get('zaobao', 'Home\IndexController@zaobao'); // 每日早报
 Route::get('wzads', 'Home\IndexController@wzAds'); // 网赚广告
 Route::get('ym/{id}.html', 'Dapei\IndexController@ym'); // 褥羊毛详情
 Route::get('free', 'Home\IndexController@freeTaoLiJin'); // 淘礼金免单集合
@@ -107,6 +109,13 @@ Route::group(['prefix' => 'home','namespace' => 'Home'], function() {
 
 });
 
+
+// 百度小程序专用接口
+Route::group(['prefix' => 'bd','namespace' => 'Home'], function() {
+
+    Route::match(['get', 'post'], '/article-list', 'BaiducmsController@articleList');
+
+});
 
 // 微博专区
 Route::group(['prefix' => 'wb','namespace' => 'Home'], function() {
