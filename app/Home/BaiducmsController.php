@@ -20,11 +20,12 @@ class BaiducmsController extends BaseController
     public function articleList()
     {
         $data = ['msg' => '', 'code' => 1, 'url' => '', 'data'=>[]];
-        $paginate = DB::connection('baiduMysql')->table('post')->paginate(10);
+        $paginate = DB::connection('baiduMysql')->table('post')->where('log_Status', 0)->paginate(10);
         foreach ($paginate as $value) {
+            preg_match('<img.*src=["](.*?)["].*?>',$value->log_Content,$match);
             $data['data']['itemList'][] = [
                 'id' => $value->log_ID,
-                'firstImg' => 'https://bd.juanzhuzhu.com/zb_users/upload/2021/01/202101211611237111679670.png',
+                'firstImg' => $match[1] ?: 'http://juanzhuzhu.com/no-images.jpg',
                 'title' => $value->log_Title,
                 'publish_date' => date('Y-m-d H:i', $value->log_PostTime),
             ];
