@@ -49,10 +49,15 @@ class BlogFree extends Command
             $num = ++$key;
             $strBaidu .= ('<p>'.$num.'、'.$item['text'].'</p>');
             $str .= ('<p><a href="'.$item['url'].'" target="_blank">'.$num.'、'.$item['text'].$item['tkl'].'</a></p>');
+            $arrContent[] = [
+                'img' => '',
+                'desc' => $num.'、'.$item['text'],
+                'tkl' => $item['tkl']
+            ];
         }
 
         // 百度小程序嵌套页面用口令
-        DB::connection('baiduMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$strBaidu, 'log_PostTime'=>time()]);
+        DB::connection('baiduMysql')->table('post')->where('log_ID', 1)->update(['log_Content_Arr'=>json_encode($arrContent),'log_Content'=>$strBaidu, 'log_PostTime'=>time()]);
         // freeblog
         DB::connection('freeMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$str, 'log_PostTime'=>time()]);
         echo date('Y-m-d H:i:s') . '_success_' . $this->description;
