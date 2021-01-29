@@ -54,7 +54,7 @@ class BrandCoupon extends Command
             array_multisort($arrTmpPrice, SORT_DESC, $arrList);
             foreach ($arrList as $value) {
                 // 获取单品优惠券
-                $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
+//                $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
                 $strGoods .= '<p><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></p>
             <p>【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '</p>';
             }
@@ -64,6 +64,9 @@ class BrandCoupon extends Command
             $record->log_Content = $strGoods;
             echo $db->table('post')->where('log_ID', $record->log_ID)->update([
                 'log_Content' => $record->log_Content,
+                'log_Cover' => $value['mainPic'],
+                'log_CateID' => $value['cid'],
+                'log_BrandID' => $value['brandId'],
             ]);
             usleep(500000);
         }

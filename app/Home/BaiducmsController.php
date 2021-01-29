@@ -25,10 +25,9 @@ class BaiducmsController extends BaseController
         $cid && $objDb->where('log_CateID', $cid);
         $paginate = $objDb->paginate(10);
         foreach ($paginate as $value) {
-            preg_match('<img.*src=["](.*?)["].*?>', $value->log_Content, $match);
             $data['data']['itemList'][] = [
                 'id' => $value->log_ID,
-                'firstImg' => $match[1] ?: 'http://juanzhuzhu.com/no-images.jpg',
+                'firstImg' => $value->log_Cover ?: 'http://juanzhuzhu.com/no-images.jpg',
                 'title' => $value->log_Title,
                 'publish_date' => date('Y-m-d H:i', $value->log_PostTime),
             ];
