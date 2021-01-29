@@ -57,7 +57,12 @@ class BaiducmsController extends BaseController
                 'publish_date' => date('Y-m-d H:i', $record->log_PostTime),
                 'content' => $record->log_Content,
                 'keywords' => '',
-                'description' => $record->log_Intro
+                'description' => $record->log_Intro,
+                'detail' => [
+                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
+                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
+                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg']
+                ],
             ];
         }
         return $data;
