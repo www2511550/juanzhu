@@ -99,6 +99,7 @@ class BrandCoupon extends Command
         $dbData = $db->table('post')->where('log_CateID', '>', 2)->get();
 
         foreach ($dbData as $record) {
+            $arrContent = [];
             $brandId = $record->log_BrandID ?: $record->log_Meta;
             $data = json_decode(file_get_contents('http://onsales.top/dtk.php?act=brandProudct&id=' . $brandId), true);
             $strGoods = '';
