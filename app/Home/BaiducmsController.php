@@ -61,7 +61,8 @@ class BaiducmsController extends BaseController
                 'detail' => [
                     ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
                     ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
-                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg']
+                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
+                    ['desc'=>'复制口令¥1232443dfsdg¥','img'=>'http://img.alicdn.com/imgextra/i3/2209082384466/O1CN01EyXqpq1irTSoddcV3_!!2209082384466.jpg_310x310.jpg'],
                 ],
             ];
         }
