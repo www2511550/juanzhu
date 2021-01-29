@@ -39,7 +39,7 @@ class BrandCoupon extends Command
     public function handle()
     {
         $db = DB::connection('baiduMysql');
-        $dbData = $db->table('post')->where('log_CateID', 3)->get();
+        $dbData = $db->table('post')->where('log_CateID', '>', 2)->get();
 
         foreach ($dbData as $record){
             $data = json_decode(file_get_contents('http://onsales.top/dtk.php?act=brandProudct&id='.$record->log_Meta), true);
@@ -62,13 +62,14 @@ class BrandCoupon extends Command
 //            $strGoods .= '<p><a href="' . $coupon['data']['couponClickUrl'] . '" target="_blank"><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></a></p>
 //            <p><a href="' . $value['couponLink'] . '" target="_blank">【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '【复制口令：'.$coupon['data']['tpwd'].'】</a></p>';
             $record->log_Content = $strGoods;
+            $strCover = !strpos('https://sdgsdfsadfasdfas', '//') ? ('https:'.$value['mainPic']) : $value['mainPic'];
             echo $db->table('post')->where('log_ID', $record->log_ID)->update([
                 'log_Content' => $record->log_Content,
-                'log_Cover' => $value['mainPic'],
+                'log_Cover' => $strCover,
                 'log_CateID' => $value['cid'],
                 'log_BrandID' => $value['brandId'],
             ]);
-            usleep(500000);
+            usleep(100000);
         }
 
 //        // 品牌
