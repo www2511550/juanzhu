@@ -99,7 +99,8 @@ class BrandCoupon extends Command
         $dbData = $db->table('post')->where('log_CateID', '>', 2)->get();
 
         foreach ($dbData as $record) {
-            $data = json_decode(file_get_contents('http://onsales.top/dtk.php?act=brandProudct&id=' . $record->log_Meta), true);
+            $brandId = $record->log_BrandID ?: $record->log_Meta;
+            $data = json_decode(file_get_contents('http://onsales.top/dtk.php?act=brandProudct&id=' . $brandId), true);
             $strGoods = '';
             // 按照销量排序
             $arrList = $data['data']['list'] ?: [];
@@ -108,9 +109,11 @@ class BrandCoupon extends Command
             if (!count($arrList)){
                 if (isset($data['data']['brandId']) && $data['data']['brandId']){
                     $strCover = !strpos($data['data']['brandLogo'], '//') ? ('https:' . $data['data']['brandLogo']) : $data['data']['brandLogo'];
+                    $arrContent = ['img'=>$strCover, 'desc'=>$data['data']['brandDesc'], 'tkl'=>''];
                     $db->table('post')->where('log_ID', $record->log_ID)->update([
                         'log_Cover' => $strCover,
                         'log_BrandID' => $data['data']['brandId'],
+                        'log_Content_Arr' => json_encode($arrContent),
                     ]);
                 }
                 continue;
@@ -121,9 +124,14 @@ class BrandCoupon extends Command
             array_multisort($arrTmpPrice, SORT_DESC, $arrList);
             foreach ($arrList as $value) {
                 // 获取单品优惠券
-//                $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
+                $coupon = json_decode(file_get_contents('http://onsales.top/dtk.php?act=goodsCoupon&id='.$value['goodsId']), true);
                 $strGoods .= '<p><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></p>
             <p>【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '</p>';
+                $arrContent[] = [
+                    'img' => $value['marketingMainPic'] ?: $value['mainPic'],
+                    'desc' => '【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '',
+                    'tkl' => $coupon['data']['tpwd']
+                ];
             }
 
 //            $strGoods .= '<p><a href="' . $coupon['data']['couponClickUrl'] . '" target="_blank"><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></a></p>
@@ -135,6 +143,7 @@ class BrandCoupon extends Command
                 'log_Cover' => $strCover,
                 'log_CateID' => $value['cid'],
                 'log_BrandID' => $value['brandId'],
+                'log_Content_Arr' => json_encode($arrContent),
             ]);
             usleep(100000);
         }

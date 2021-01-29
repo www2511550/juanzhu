@@ -45,6 +45,7 @@ class BlogFree extends Command
                 <p><b style="color: palevioletred">'.date('m月d日').'0元免单活动已更新！！！</b>';
         $str = $strBase.'<br/><b>没抢到的小伙伴建议加微信：juanzhujike</b></p>';
         $strBaidu = $strBase.'</p>';  // 百度小程序禁止有诱导加人
+        $arrContent[] = ['img'=>'https://bd.juanzhuzhu.com/zb_users/upload/2021/01/202101211611237111679670.png', 'desc'=>'', 'tkl'=>''];
         foreach ($freeInfo as $key=>$item) {
             $num = ++$key;
             $strBaidu .= ('<p>'.$num.'、'.$item['text'].'</p>');
