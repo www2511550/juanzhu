@@ -106,11 +106,13 @@ class BrandCoupon extends Command
             $arrTmpPrice = array();
             // 没有商品，更新品牌信息
             if (!count($arrList)){
-                $strCover = !strpos($data['data']['brandLogo'], '//') ? ('https:' . $data['data']['brandLogo']) : $data['data']['brandLogo'];
-                $db->table('post')->where('log_ID', $record->log_ID)->update([
-                    'log_Cover' => $strCover,
-                    'log_BrandID' => $data['data']['brandId'],
-                ]);
+                if (isset($data['data']['brandId']) && $data['data']['brandId']){
+                    $strCover = !strpos($data['data']['brandLogo'], '//') ? ('https:' . $data['data']['brandLogo']) : $data['data']['brandLogo'];
+                    $db->table('post')->where('log_ID', $record->log_ID)->update([
+                        'log_Cover' => $strCover,
+                        'log_BrandID' => $data['data']['brandId'],
+                    ]);
+                }
                 continue;
             }
             foreach ($arrList as $value) {
