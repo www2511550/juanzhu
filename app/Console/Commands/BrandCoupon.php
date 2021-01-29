@@ -62,7 +62,7 @@ class BrandCoupon extends Command
 //            $strGoods .= '<p><a href="' . $coupon['data']['couponClickUrl'] . '" target="_blank"><img class="ue-image" src="' . ($value['marketingMainPic'] ?: $value['mainPic']) . '" title="' . $value['title'] . '"/></a></p>
 //            <p><a href="' . $value['couponLink'] . '" target="_blank">【券后' . $value['actualPrice'] . '元】' . $value['desc'] . '【复制口令：'.$coupon['data']['tpwd'].'】</a></p>';
             $record->log_Content = $strGoods;
-            $strCover = !strpos('https://sdgsdfsadfasdfas', '//') ? ('https:'.$value['mainPic']) : $value['mainPic'];
+            $strCover = !strpos($value['mainPic'], '//') ? ('https:'.$value['mainPic']) : $value['mainPic'];
             echo $db->table('post')->where('log_ID', $record->log_ID)->update([
                 'log_Content' => $record->log_Content,
                 'log_Cover' => $strCover,
