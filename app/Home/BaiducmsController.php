@@ -56,7 +56,7 @@ class BaiducmsController extends BaseController
                 'title' => $record->log_Title,
                 'publish_date' => date('Y-m-d H:i', $record->log_PostTime),
                 'content' => $record->log_Content,
-                'keywords' => '',
+                'keywords' => ' ',
                 'description' => $record->log_Intro,
                 'content_arr' => $record->log_Content_Arr ? json_decode($record->log_Content_Arr, true) : [],
             ];
