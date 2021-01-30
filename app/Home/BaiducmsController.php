@@ -25,7 +25,7 @@ class BaiducmsController extends BaseController
 
         if ($_GET['test']) {
 
-            $strCacheKey = 'articleList:' . $cid.':'.$request->get('page', 1);
+            $strCacheKey = 'articleList1:' . $cid.':'.$request->get('page', 1);
             return Cache::remember($strCacheKey, 60 * 2, function () use ($cid, $data) {
 
                 $objDb = DB::table('bd_brand')->where('status', 1);
