@@ -59,6 +59,7 @@ class BlogFree extends Command
 
         // 百度小程序嵌套页面用口令
         DB::connection('baiduMysql')->table('post')->where('log_ID', 1)->update(['log_Content_Arr'=>json_encode($arrContent),'log_Content'=>$strBaidu, 'log_PostTime'=>time()]);
+        DB::table('bd_brand')->where('id', 1)->update(['content_arr'=>json_encode($arrContent),'content'=>$strBaidu, 'created_at'=>date('Y-m-d H:i:s')]);
         // freeblog
         DB::connection('freeMysql')->table('post')->where('log_ID', 1)->update(['log_Content'=>$str, 'log_PostTime'=>time()]);
         echo date('Y-m-d H:i:s') . '_success_' . $this->description;
