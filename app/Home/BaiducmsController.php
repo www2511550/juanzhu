@@ -9,6 +9,7 @@
 namespace App\Home;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
 class BaiducmsController extends BaseController
@@ -23,18 +24,27 @@ class BaiducmsController extends BaseController
         $data = ['msg' => '', 'code' => 1, 'url' => '', 'data' => []];
 
         if ($_GET['test']) {
-            $objDb = DB::table('bd_brand')->where('status', 1);
-            $cid && $objDb->where('cid', $cid);
-            $paginate = $objDb->paginate(10);
-            foreach ($paginate as $value) {
-                $data['data']['itemList'][] = [
-                    'id' => $value->id,
-                    'firstImg' => $value->cover ?: 'http://juanzhuzhu.com/no-images.jpg',
-                    'title' => $value->title,
-                    'intro' => $value->intro,
-                    'publish_date' => $value->created_at,
-                ];
-            }
+
+            $strCacheKey = 'articleList:' . $cid;
+            return Cache::remember($strCacheKey, 60 * 2, function () use ($cid, $data) {
+
+                $objDb = DB::table('bd_brand')->where('status', 1);
+                $cid && $objDb->where('cid', $cid);
+                $paginate = $objDb->paginate(10);
+                foreach ($paginate as $value) {
+                    $data['data']['itemList'][] = [
+                        'id' => $value->id,
+                        'firstImg' => $value->cover ?: 'http://juanzhuzhu.com/no-images.jpg',
+                        'title' => $value->title,
+                        'intro' => $value->intro,
+                        'publish_date' => $value->created_at,
+                    ];
+                }
+                $data['data']['total'] = $paginate->total();
+                $data['data']['page'] = $paginate->currentPage();
+                return $data;
+            });
+
         } else {
             $objDb = DB::connection('baiduMysql')->table('post')->where('log_Status', 0);
             $cid && $objDb->where('log_CateID', $cid);
@@ -47,11 +57,10 @@ class BaiducmsController extends BaseController
                     'publish_date' => date('Y-m-d H:i', $value->log_PostTime),
                 ];
             }
+            $data['data']['total'] = $paginate->total();
+            $data['data']['page'] = $paginate->currentPage();
+            return $data;
         }
-
-        $data['data']['total'] = $paginate->total();
-        $data['data']['page'] = $paginate->currentPage();
-        return $data;
     }
 
     /**
