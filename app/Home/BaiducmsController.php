@@ -25,25 +25,21 @@ class BaiducmsController extends BaseController
 
         if ($_GET['test']) {
 
-            $strCacheKey = 'articleList1:' . $cid.':'.$request->get('page', 1);
-            return Cache::remember($strCacheKey, 60 * 2, function () use ($cid, $data) {
-
-                $objDb = DB::table('bd_brand')->where('status', 1);
-                $cid && $objDb->where('cid', $cid);
-                $paginate = $objDb->paginate(10);
-                foreach ($paginate as $value) {
-                    $data['data']['itemList'][] = [
-                        'id' => $value->id,
-                        'firstImg' => $value->cover ?: 'http://juanzhuzhu.com/no-images.jpg',
-                        'title' => $value->title,
-                        'intro' => $value->intro,
-                        'publish_date' => $value->created_at,
-                    ];
-                }
-                $data['data']['total'] = $paginate->total();
-                $data['data']['page'] = $paginate->currentPage();
-                return $data;
-            });
+            $objDb = DB::table('bd_brand')->where('status', 1);
+            $cid && $objDb->where('cid', $cid);
+            $paginate = $objDb->paginate(10);
+            foreach ($paginate as $value) {
+                $data['data']['itemList'][] = [
+                    'id' => $value->id,
+                    'firstImg' => $value->cover ?: 'http://juanzhuzhu.com/no-images.jpg',
+                    'title' => $value->title,
+                    'intro' => $value->intro,
+                    'publish_date' => $value->created_at,
+                ];
+            }
+            $data['data']['total'] = $paginate->total();
+            $data['data']['page'] = $paginate->currentPage();
+            return $data;
 
         } else {
             $objDb = DB::connection('baiduMysql')->table('post')->where('log_Status', 0);
