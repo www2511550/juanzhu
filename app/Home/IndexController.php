@@ -23,6 +23,8 @@ use Illuminate\Http\Request;
 use DB;
 use Cache;
 use Cookie;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Support\Facades\View;
 
 class IndexController extends BaseController{
     public function __construct()
@@ -102,16 +104,31 @@ class IndexController extends BaseController{
         // 2、获取商品
         if (1) {
 
-            $result = $indexLogic->searchList($request->all());
-            if (count($result['ids']) > 0) {
-                foreach ($result['ids'] as $id) {
-                    $coupon = Coupon::find($id);
-                    if (!$coupon->id) continue;
-
-                    $data['data'][] = $coupon;
-                }
+            $taobaoLogic = new TaobaoLogic();
+            $tbData = $taobaoLogic->jingxuan(4094);
+            foreach ($tbData->result_list->map_data as $vo){
+                $data['data'][] = [
+                    'Title' => $vo->title,
+                    'Org_Price' => $vo->reserve_price,
+                    'Price' => $vo->zk_final_price,
+                    'Pic' => $vo->pict_url,
+                    'Quan_price' => $vo->coupon_amount,
+                    'Quan_time' => date('Y-m-d H:i:s', intval($vo->coupon_start_time)),
+                    'to_url' => $vo->coupon_share_url ?: $vo->click_url,
+                ];
             }
-            $data['total'] = $result['total'];
+
+
+//            $result = $indexLogic->searchList($request->all());
+//            if (count($result['ids']) > 0) {
+//                foreach ($result['ids'] as $id) {
+//                    $coupon = Coupon::find($id);
+//                    if (!$coupon->id) continue;
+//
+//                    $data['data'][] = $coupon;
+//                }
+//            }
+//            $data['total'] = $result['total'];
 
         } else {
 
@@ -406,9 +423,75 @@ class IndexController extends BaseController{
 
     public function test()
     {
+/*        // 获取token
+//        $arrToken = json_decode(file_get_contents('https://openapi.baidu.com/oauth/2.0/token?grant_type=client_credentials&client_id=M3l7f6M6lc1SQnUdGeGFGW7oCSyGLHUW&client_secret=krsu9KA0rfpogduSVvc02xwapgCwDIkc&scope=smartapp_snsapi_base'), true);
+        $arrToken = ['access_token' => '24.1d5d6036ae8681afa7064568b16453b4.2592000.1614666210.282335-23543349'];
+        $api = 'https://openapi.baidu.com/rest/2.0/smartapp/access/submitresource';
+        $dataBrand = DB::table('bd_brand')->where('status', 1)->whereIn('id',[99])->paginate(100);
+        foreach ($dataBrand as $brand){
+            $arrContent = json_decode($brand->content_arr, true);
+//            pre($arrContent);die;
+            if (count($arrContent) < 4) continue;
+            $params = [
+                'access_token' => $arrToken['access_token'],
+                'path' => '/pages/articleDetail/articleDetail?id='.$brand->id,
+                'title' => $brand->title,
+                'images' => json_encode([$arrContent[1]['img'], $arrContent[2]['img'], $arrContent[3]['img']]),
+                'body' => $arrContent[0]['desc'], // 内容的介绍，最多 2000 字符
+                'feed_type' => '综合',
+                'feed_sub_type' => '综合',
+                'mapp_type' => '1000',
+                'mapp_sub_type' => '1001',
+                'ext' => json_encode([
+                    'author_name' => '优惠券猪猪',
+                    'publish_time' => date('Y年m月d日'),
+                ]),
+            ];
+            echo $brand->id;
+            pre(httpCurl($api, $params));
+        }
+
+        die('aa');*/
+
+//        // 获取邮箱标题
+//        $title = '入群留意-新群提醒-【查看】'.date('Y年m月d日');
+//
+//        $toMail = '1248694991@qq.com';
+//
+////        $content = '<img src="https://img.alicdn.com/bao/uploaded/i2/2074450097/O1CN01J0ztWf1CaT4lSMefT_!!0-item_pic.jpg_130x130.jpg" />';
+////        Mail::raw($content, function ($message) use ($toMail, $title) {
+////            $message->subject($title);
+////            $message->to($toMail);
+////        });
+//
+//        // 第一个参数填写模板的路径，第二个参数填写传到模板的变量
+//        Mail::send('mail',['name' => 'laravel'],function ($message) use ($toMail, $title){
+//            // 发件人（你自己的邮箱和名称）
+////            $message->from('yn3259@163.com', 'laravel');
+//            // 收件人的邮箱地址
+//            $message->to($toMail);
+//            // 邮件主题
+//            $message->subject($title);
+//        });
+//die('aa');
+
         if($_GET['test']){
             phpinfo();die;
         }
+
+        $taobaoLogic = new TaobaoLogic();
+        $data = $taobaoLogic->jingxuan(30443);
+//        $data = $taobaoLogic->search('【红袍花椒】四川大红袍花椒粒100g');
+        if (!count($data->result_list->map_data)) {
+            pre($data);die;
+        }
+        foreach ($data->result_list->map_data as $value){
+
+            echo '<a href="'.($value->coupon_share_url ?: $value->click_url).'" target="_blank"><img src="'.$value->pict_url.'" /></a><br/><br/><br/>';
+            pre($value);
+        }
+
+        pre($data->result_list);die;
 
         $dataokeService = new DataokeService();
         $data = $dataokeService->getGoodsList();
@@ -527,7 +610,11 @@ class IndexController extends BaseController{
      */
     public function tkData()
     {
-        $data = DB::table('saler_data')->orderBy('id', 'desc')->paginate(50);
+        if($_GET['type'] == 'dtk'){
+            $data = DB::table('dtk_data')->orderBy('id', 'desc')->paginate(50);
+        }else{
+            $data = DB::table('saler_data')->orderBy('id', 'desc')->paginate(50);
+        }
 
         return view('home.index.tkData', ['data' => $data]);
     }

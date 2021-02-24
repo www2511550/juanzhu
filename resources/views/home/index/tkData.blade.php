@@ -96,7 +96,9 @@
     }
 </style>
 
-<div class="page_title">大淘客、好单库商家列表</div>
+<div class="page_title">
+    <a href="/tkdata?type=dtk">大淘客</a>、
+    <a href="/tkdata">好单库</a>商家列表</div>
 <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
     <blockquote class="site-text layui-elem-quote">
         每天早上7点定时更新抓取大淘客、好单库商家联系方式
@@ -110,7 +112,7 @@
         <li class="layui-timeline-item" v-for="(item,index) in data"><i class="layui-icon layui-timeline-axis"></i>
             <div class="layui-timeline-content layui-text">
                 <img src="{{ $val->head_img }}" style="width: 35px;height: 35px;" alt="{{ $val->name }}"> <b>{{ $val->name }}</b><br/>
-                <i class="layui-icon"></i>  <a target="_blank" v-bind:href="javascript:;">{{ $val->intro }}</a><br />
+                {{ $val->qq }}<i class="layui-icon"></i>  <a target="_blank" v-bind:href="javascript:;">{{ $val->intro }}</a><br />
                 <a class="copycontent" href="http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin={{ $val->qq }}" style="color:#0000FF" target="_blank"><i class="layui-icon"></i> 点我qq({{ $val->qq }})咨询商家 </a>
             </div>
         </li>
