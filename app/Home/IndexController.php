@@ -612,6 +612,10 @@ class IndexController extends BaseController{
     {
         if($_GET['type'] == 'dtk'){
             $data = DB::table('dtk_data')->orderBy('id', 'desc')->paginate(50);
+            foreach ($data as $vo) {
+                preg_match('/uin\=(.*)\&site/', $vo->qq, $qq);
+                $vo->qq = $qq[1];
+            }
         }else{
             $data = DB::table('saler_data')->orderBy('id', 'desc')->paginate(50);
         }
