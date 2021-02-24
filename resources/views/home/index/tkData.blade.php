@@ -120,7 +120,7 @@
     </ul>
 
     <div class="page">
-        {{$data->links()}}
+        {{$data->appends(request()->all())->links()}}
     </div>
 </div>
 
