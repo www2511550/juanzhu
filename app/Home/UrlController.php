@@ -51,6 +51,21 @@ class UrlController extends BaseController
     }
 
     /**
+     * 跳转京东
+     * @param Request $request
+     */
+    public function toJd(Request $request)
+    {
+        $key = $request->route('key');
+        if (is_mobile()){
+            header('Location:sinaweibo://browser/close?scheme=openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"https://u.jd.com/ih7ggQm"}');
+            die;
+        }
+        header('location:https://u.jd.com/ih7ggQm');
+        die;
+    }
+
+    /**
      * 地址跳转
      * @param Request $request
      */

@@ -17,6 +17,7 @@ Route::group(['namespace' => 'Home'], function () {
 
     // 短链接路由处理
     Route::get('/{key?}', 'UrlController@index')->name('url.index');
+    Route::get('/jd/{key?}', 'UrlController@toJd')->name('url.toJd');
     Route::post('url/short', 'UrlController@short');
     Route::get('go/{key?}', 'UrlController@go')->name('url.go');
     Route::post('url/register', 'UrlController@register')->name('url.register');
@@ -38,7 +39,6 @@ Route::group(['namespace' => 'Home'], function () {
     Route::any('/tool/out', 'ToolController@out')->name('tool.out');
     Route::any('/tool/personal', 'ToolController@personal')->name('tool.personal');
     Route::any('/tool/text-url', 'ToolController@textUrl')->name('tool.textUrl');
-    Route::any('/tool/text', 'ToolController@text');  // 个人专属
     Route::any('/tool/to-self-url', 'ToolController@toSelfUrl');
     Route::any('/tool/tkl-decrypt', 'ToolController@tklDecrypt');
 
