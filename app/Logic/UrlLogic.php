@@ -162,7 +162,7 @@ class UrlLogic
             $insertId = Url::insertGetId([
                 'key' => $strKey,
                 'long_url' => $longUrl,
-                'user_id' => $user_id,
+                'user_id' => intval($user_id),
                 'long_md5' => md5($longUrl),
                 'money' => $money,
                 'self_url' => $selfUrl,

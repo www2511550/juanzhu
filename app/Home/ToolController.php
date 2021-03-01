@@ -18,12 +18,13 @@ use Illuminate\Http\Request;
 
 class ToolController extends BaseController
 {
-    public $user;
+    public $user, $pid;
 
     public function __construct()
     {
         parent::__construct();
         $this->user = UrlUser::find(intval($_COOKIE['url_uid']));
+        $this->pid = 'mm_113220731_2218350342_111200050341';
     }
 
 
@@ -143,6 +144,32 @@ class ToolController extends BaseController
     }
 
     /**
+     * 微博跳转拼多多app
+     */
+    public function weiboToPinduoduo(Request $request)
+    {
+        if ($request->method() == 'POST') {
+
+        } else {
+            return view('tool.pinduoduo');
+        }
+
+    }
+
+    /**
+     * 微博跳转京东app
+     */
+    public function weiboToJd(Request $request)
+    {
+        if ($request->method() == 'POST') {
+
+        } else {
+            return view('tool.jd');
+        }
+
+    }
+
+    /**
      * 他人链接转为自己链接
      */
     public function toSelfUrl(Request $request, ToolLogic $toolLogic)
@@ -153,13 +180,17 @@ class ToolController extends BaseController
             if (!$pid){
                 return response()->json(['status'=>0, 'info'=>'请选择联盟PID']);
             }
-            $quanInfo = $toolLogic->getQuanUrlByPid($url, $pid, 1);
-            if (!$quanInfo){
+            $tbkSession = trim($request->get('tbk_session')) ? trim($request->get('tbk_session')) : $this->user->tbk_session;
+            if (!$tbkSession){
+                return response()->json(['status'=>0, 'info'=>'请填写授权session']);
+            }
+            $quanInfo = $toolLogic->tklExplainAndConvert($url, $pid, $tbkSession);
+            if (!$quanInfo['status']){
                 return response()->json(['status'=>0, 'info'=>'未找到联盟商品']);
             }
-            $weibo = (new UrlLogic())->getShortUrl($quanInfo['coupon_short_url'], 3);
-            $data = $quanInfo['title'].PHP_EOL.'微博跳手淘APP：'.$weibo['data']['url'].PHP_EOL
-                .'淘口令：'.$quanInfo['tbk_pwd'];
+            $weibo = (new UrlLogic())->getShortUrl($quanInfo['coupon_url'], 3);
+            $data = '微博跳手淘APP：'.$weibo['data']['url'].PHP_EOL
+                .'淘口令：'.$quanInfo['data']['tkl'];
 
             return response()->json(['status'=>1, 'data'=>$data]);
         } else {
@@ -174,7 +205,7 @@ class ToolController extends BaseController
     {
         if ($request->method() == 'POST') {
             $url = $request->get('content');
-            $quanInfo = $toolLogic->getQuanUrlByPid($url, 'mm_47800736_21362628_72092261', 1);
+            $quanInfo = $toolLogic->getQuanUrlByPid($url, $this->pid, 1);
             if (!$quanInfo) {
                 return response()->json(['status' => 0, 'info' => '未找到联盟商品']);
             }
@@ -222,6 +253,26 @@ class ToolController extends BaseController
         } else {
             return view('tool.shortUrl');
         }
+    }
+
+    /**
+     * 微博拼多多，京东app短链接
+     */
+    public function short(Request $request, ToolLogic $toolLogic)
+    {
+        $longUrl = $request->get('longUrl');
+        $type = $request->get('type');
+        if (!in_array($type, ['pinduoduo', 'jd']) || !$longUrl){
+            return ['status'=>0, 'info'=>'参数错误！'];
+        }
+        if ($type == 'pinduoduo' && !strpos($longUrl, 'pinduoduo.com')){
+            return response()->json(['status' => 0, 'info' => '非拼多多链接不支持转换！']);
+        }
+        if ($type == 'jd' && !strpos($longUrl, 'jd.com')){
+            return response()->json(['status' => 0, 'info' => '非京东链接不支持转换！']);
+        }
+
+        return $toolLogic->getWeiboShortUrl($longUrl, $type);
     }
 
     /**
@@ -360,6 +411,16 @@ class ToolController extends BaseController
 
     public function test(Request $request)
     {
+        $url = 'http://api.web.ecapi.cn/taoke/doItemHighCommissionPromotionLinkByAll';
+        $params = [
+            'apkey' => '5c42cb82-d83d-f473-1268-f65d14e8f62e',
+            'tbname' => '惜惜faras',
+            'pid' => 'mm_113220731_2218350342_111200050341',
+            'content' => '5.0，YSVOcCSU3s9信 https://m.tb.cn/h.4PXOdeo?sm=1701e6  南极人袜子男士短袜纯棉防臭吸汗夏季薄款船袜低帮短筒隐形潮夏天',
+        ];
+        $result = json_decode(http($url, $params), true);
+        pre($result);die;
+
 //        $url = 'https://api.open.21ds.cn/apiv1/sclicktoid';
 //        $params = [
 //            'apkey' => '5c42cb82-d83d-f473-1268-f65d14e8f62e',

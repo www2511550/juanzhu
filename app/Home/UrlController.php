@@ -118,8 +118,8 @@ class UrlController extends BaseController
         // 防止恶意请求
         $strIp = request()->getClientIp();
         $userNum = DB::table('url_log')->where('ip', $strIp)->where('created_at', '>', strtotime(date('Y-m-d 00:00:00')))->count();
-        if ($userNum > 500) {
-            return response()->json(['status' => 0, 'info' => '已经达到使用上线，有问题请联系管理员！']);
+        if ($userNum > 10) {
+            return response()->json(['status' => 0, 'info' => '已经达到使用上线，有问题请联系管理员QQ！']);
         }
 //        if (substr($strIp, 0, 7) == '140.243'){
 //            return response()->json(['status' => 0, 'info' => '已经达到使用上线，有问题请联系管理员！']);

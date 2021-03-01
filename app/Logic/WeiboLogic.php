@@ -54,29 +54,32 @@ class WeiboLogic{
     public function shortUrl($long_url, $type = '')
     {
         // 防微博屏蔽淘宝跳转
+        // https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=tbopen://m.taobao.com/tbopen/index.html?h5Url=https://s.click.taobao.com/C9hKsqu&allowRedirect=1
         if ($type == 'toTb'){
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo%3A%2F%2Fbrowser%2Fclose%3Fscheme%3Dsinaweibo%253A%252F%252Fbrowser%253Furl%253Dhttp%25253A%25252F%25252F'.$long_url.'?%25252FPKUna0VG%2526allowRedirect%253D1%2526disable_sinaurl%253D1';
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo%3A%2F%2Fbrowser%2Fclose%3Fscheme%3Dsinaweibo%253A%252F%252Fbrowser%253Furl%253Dhttp%25253A%25252F%25252F'.$long_url.'?%25252FPKUna0VG%2526allowRedirect%253D1%2526disable_sinaurl%253D1';
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=tbopen://m.taobao.com/tbopen/index.html?h5Url=' . $long_url . '&allowRedirect=1';
         }else{
             $long_url = urlencode($long_url);
         }
-        $url = 'http://api.ft12.com/api.php';
+
+        $url = 'http://www.f4cklangzi.cn/api/create.html';
         $params = [
-            'url' => $long_url,
-            'apikey' => '18674221127@1c78d4115dca542fb187695500eb0cac'
+            'original_url' => $long_url,
+            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
+            'mode' => 3,
         ];
-        $ft12 = http($url, $params);
-
-        return $ft12 ?: '';
-
-
-        $baseApi = $this->api.'short_url/shorten.json';
-        $result = http($baseApi, [
-            'access_token' => WB_ACCESSTOKEN,
-            'url_long' => $long_url,
-        ]);
+        $result = http($url, $params);
         $data = json_decode($result, true);
+        return $data['code'] == 0 ? $data['data']['short_url'] : '';
 
-        return $data['urls'][0]['url_short'] ?: '';
+        // 第三方接口
+//        $url = 'http://api.ft12.com/api.php';
+//        $params = [
+//            'url' => $long_url,
+//            'apikey' => '18674221127@1c78d4115dca542fb187695500eb0cac'
+//        ];
+//        $ft12 = http($url, $params);
+//        return $ft12 ?: '';
     }
 
     /**

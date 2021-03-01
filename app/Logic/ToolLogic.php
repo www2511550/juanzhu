@@ -113,20 +113,21 @@ class ToolLogic
     public function getTbOrder($start_time, $tbkSession)
     {
         $strKey = 'tborder:'.$start_time.':'.$tbkSession;
+        Cache::forget($strKey);
         return Cache::remember($strKey, 24*60, function () use($start_time, $tbkSession){
-            $url = 'http://gateway.kouss.com/tbpub/orderGet';
+            $url = 'http://gateway.kouss.com/tbpub/orderDetailGet';
             $params = [
                 "fields" => "tb_trade_parent_id,tk_status,tb_trade_id,num_iid,item_title,item_num,price,pay_price,seller_nick,seller_shop_title,commission,commission_rate,unid,create_time,earning_time,tk3rd_pub_id,tk3rd_site_id,tk3rd_adzone_id,relation_id",
                 "start_time" => date('Y-m-d H:i:s', strtotime($start_time)),
+                "end_time" => date('Y-m-d H:i:s', strtotime($start_time.' +3 hour')),
                 "span" => 1200,
                 "page_size" => 100,
-                "tk_status" => 1,
                 "order_query_type" => "create_time",
                 "session" => $tbkSession
             ];
             $result = json_decode(http($url, $params, 'POST'), true);
 
-            return isset($result['tbk_sc_order_get_response']['results']['n_tbk_order']) ? $result['tbk_sc_order_get_response']['results']['n_tbk_order'] : [];
+            return isset($result['data']['results']['publisher_order_dto']) ? $result['data']['results']['publisher_order_dto'] : [];
         });
     }
 
@@ -138,9 +139,10 @@ class ToolLogic
      */
     public function getQuanUrlByPid($url, $pid, $isReturnInfo = 0)
     {
-        $baseUrl = 'http://api.vephp.com/directhc';
+//        $baseUrl = 'http://mvapi.vephp.com/directhc';
+        $baseUrl = 'http://mvapi.vephp.com/hcapi';
         $params = [
-            'vekey' => 'V00000836Y52123108',
+            'vekey' => 'V00000836Y02045115',
             'para' => $url,
             'pid' => $pid,
             'detail' => 1,
@@ -179,6 +181,82 @@ class ToolLogic
         $result = file_get_contents($baseUrl);
         $data = json_decode($result, true);
         return isset($data['result']) ? $data['result'] : [];
+    }
+
+    /**
+     * 获取微博跳转app短链接
+     */
+    public function getWeiboShortUrl($longUrl, $type)
+    {
+        $baseShortUrl = 'onsales.top/toapp.php';
+        $pos = strpos($longUrl, '//')+2;
+        $url = substr($longUrl, $pos);
+        $strUrl = $baseShortUrl.'?u='.$url.'&t='.$type.'&';
+        $weiboLogic = new WeiboLogic();
+        $shortUrl = $weiboLogic->shortUrl($strUrl, 'toTb');
+
+        return [
+            'status' => 1,
+            'data' => [
+                'url' => $shortUrl,
+                'tkl' => '',
+                'short_url' => $longUrl,
+            ]
+        ];
+    }
+
+    /**
+     * 淘口令解析和转链接，可以转换任意pid
+     * @param $tkl
+     * @param $pid
+     */
+    public function tklExplainAndConvert($tkl, $pid, $session)
+    {
+        // A、转换为id
+        $goodsId = $tkl;
+        if (!is_numeric($goodsId)){
+            $explainIdUrl = 'http://tk.2yhq.top/api/tbk/any-explain';
+            $result = json_decode(http($explainIdUrl, ['content'=>$tkl]), true);
+            if (!$result['status']) return '';
+            $goodsId = $result['data']['goodsId'];
+        }
+
+        // B、高佣转链接
+        $arrPid = explode('_', $pid);
+        $url = 'http://gateway.kouss.com/tbpub/privilegeGet';
+        $params = [
+            'session'=> $session,
+            'item_id' => $goodsId,
+            'site_id' => $arrPid[2],
+            'adzone_id' => $arrPid[3],
+        ];
+        $result = http($url, $params, 'POST');
+        $data = json_decode($result, true);
+        if (isset($data['code']) && $data['code'] > 0){
+            return ['status'=> 0, 'info'=> $data['sub_msg']];
+        }
+        $goodsInfo = $data['result']['data'];
+        $coupon_url = $goodsInfo['coupon_click_url'] ?? $goodsInfo['item_url'];
+
+        // C、获取商品详情
+        $strTkl = $title = '';
+        if ($goodsInfo['item_id']){
+            $taobaoLogic = new TaobaoLogic();
+            $item = $taobaoLogic->itemInfo($goodsInfo['item_id']);
+            if ($item){
+                $title = $item->title;
+                $tkl = $taobaoLogic->createTkl($coupon_url, $item->title, $item->pict_url);
+                $strTkl = $tkl->model ?? '';
+            }
+        }
+        $arrData = [
+            'coupon_url' => $coupon_url,
+            'item_id' => $goodsInfo['item_id'],
+            'tk_rate' => $goodsInfo['max_commission_rate'],
+            'tkl' => $strTkl,
+            'title' => $title,
+        ];
+        return ['status'=>1, 'data'=>$arrData];
     }
 
 }

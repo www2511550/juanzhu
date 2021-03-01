@@ -11,14 +11,15 @@ namespace App\Logic;
 require app_path('../vendor/taobao-sdk/TopSdk.php');
 
 
-class TaobaoLogic{
+class TaobaoLogic
+{
 
     public function __construct()
     {
-        $this->appkey = '25307921';
-        $this->secret = '88aa7d37745851551ef857ba72c43fde';
-        $this->pid = 'mm_47800736_21362628_72084401';
-        $this->thirdPid = '431230024';
+        $this->appkey = '32403884';
+        $this->secret = '5f067d27d334c5847e110c63042b65f0';
+        $this->pid = 'mm_113220731_2218350342_111164050217';
+        $this->thirdPid = '111164050217';
     }
 
     /**
@@ -37,6 +38,7 @@ class TaobaoLogic{
         $resp = $c->execute($req);
         pree($resp);
     }
+
     /**
      * 海淘抢api
      * http://open.taobao.com/docs/api.htm?spm=a219a.7629065.0.0.FL8QCF&apiId=27543
@@ -83,6 +85,25 @@ class TaobaoLogic{
         }
 
         return $str;
+    }
+
+    /**
+     * 创建淘口令
+     * @param $url
+     * @param $text
+     * @param $logo_url
+     */
+    public function createTkl($url, $text, $logo_url)
+    {
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkTpwdCreateRequest();
+        $req->setText($text);
+        $req->setUrl($url);
+        $req->setLogo($logo_url);
+        $resp = $c->execute($req);
+        return $resp->data ?? [];
     }
 
     /**
@@ -201,14 +222,14 @@ class TaobaoLogic{
 
 
         $content = curl_exec($ch);
-        pree($content);
+        pre($content);
         die;
     }
 
     /**
      * 获取商品详情图集
      * @param $goods_id
-     * @param $is_detail  1-详细信息
+     * @param $is_detail 1-详细信息
      */
     public function getGoodsImages($goods_id, $is_detail = 0, $strSize = '400x400.jpg')
     {
@@ -217,17 +238,17 @@ class TaobaoLogic{
         $c->appkey = $this->appkey;
         $c->secretKey = $this->secret;
         $req = new \TbkItemInfoGetRequest;
-        $req->setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,volume");
+//        $req->setFields("num_iid,title,pict_url,small_images,reserve_price,zk_final_price,user_type,provcity,item_url,volume");
         $req->setPlatform('1');
         $req->setNumIids($goods_id);
         $resp = $c->execute($req);
-        if($resp->results->n_tbk_item){
-            if ($is_detail){
+        if ($resp->results->n_tbk_item) {
+            if ($is_detail) {
                 $data = (array)$resp->results->n_tbk_item;
-            }else{
-                $data[] = current($resp->results->n_tbk_item->pict_url).$strSize;
-                foreach ($resp->results->n_tbk_item->small_images->string as $img){
-                    $data[] = $img.'_400x400.jpg';
+            } else {
+                $data[] = current($resp->results->n_tbk_item->pict_url) . $strSize;
+                foreach ($resp->results->n_tbk_item->small_images->string as $img) {
+                    $data[] = $img . '_400x400.jpg';
                 }
             }
         }
@@ -272,20 +293,22 @@ class TaobaoLogic{
         $req->setPageSize("20");
         $req->setPageNo("1");
         $req->setPlatform("1");
-        $req->setEndTkRate("9999");
-        $req->setStartTkRate("3000");
-        $req->setEndPrice("59");
-        $req->setStartPrice("2");
+//        $req->setEndTkRate("9999");
+//        $req->setStartTkRate("3000");
+//        $req->setEndPrice("1000");
+//        $req->setStartPrice("2");
 //        $req->setIsOverseas("false");
-        $req->setIsTmall("true");
-        $req->setSort("total_sales_des");
+//        $req->setIsTmall("false");
+//        $req->setSort("total_sales_des");
 //        $req->setItemloc("杭州");
-        $req->setCat("16,18");
-//        $req->setQ("女装");
-        $req->setHasCoupon("true");
+//        $req->setCat("16,18");
+        $req->setQ("女装");
+//        $req->setHasCoupon("true");
         $req->setAdzoneId($this->thirdPid);
         $resp = $c->execute($req);
-        if (isset($resp->result_list)){
+        pre($resp);
+        die;
+        if (isset($resp->result_list)) {
             return $resp->result_list;
         }
         return [];
@@ -308,7 +331,7 @@ class TaobaoLogic{
         $param_top_item_query->postage = "true";
         $param_top_item_query->status = "2";
 //        $param_top_item_query->taobao_category_id = "1000";
-//        $param_top_item_query->word = "test";
+        $param_top_item_query->word = "";
         $req->setParamTopItemQuery(json_encode($param_top_item_query));
         $resp = $c->execute($req);
         pree($resp);
@@ -351,9 +374,14 @@ class TaobaoLogic{
         $requests->url = $url;
         $req->setRequests(json_encode($requests));
         $resp = $c->execute($req);
-        pre($resp);die;
+        pre($resp);
+        die;
     }
 
+    /**
+     * 单个商品详情
+     * @param $goodsId
+     */
     public function oneGoods($goodsId)
     {
         $c = new \TopClient;
@@ -365,6 +393,147 @@ class TaobaoLogic{
         $resp = $c->execute($req);
         pre($resp);
         die;
+    }
+
+    /**
+     * 物料精选
+     * https://open.taobao.com/api.htm?docId=33947&docType=2
+     */
+    public function jingxuan($materialId = '28026', $params = [])
+    {
+        $page = isset($params['page']) ? $params['page'] : 1;
+        $pageSize = isset($params['pageSize']) ? $params['pageSize'] : 100;
+        $itemId = isset($params['itemId']) ? $params['itemId'] : 0;
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkDgOptimusMaterialRequest;
+        $req->setPageSize($pageSize);
+        $req->setAdzoneId($this->thirdPid);
+        $req->setPageNo($page);
+        $req->setMaterialId($materialId);
+//        $req->setDeviceValue("xxx");
+//        $req->setDeviceEncrypt("MD5");
+//        $req->setDeviceType("IMEI");
+//        $req->setContentId("323");
+//        $req->setContentSource("xxx");
+        $itemId > 0 && $req->setItemId($itemId);
+//        $req->setFavoritesId("123445");
+        $resp = $c->execute($req);
+        return $resp;
+    }
+
+    /**
+     * 物料搜索
+     * https://open.taobao.com/api.htm?docId=35896&docType=2
+     * @param string $q
+     * @return mixed|\ResultSet|\SimpleXMLElement
+     */
+    public function search($q = '', $params = [], $is_goods_id = 0)
+    {
+        $is_goods_id && $q = 'https://item.taobao.com/item.htm?id='.$q;
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkDgMaterialOptionalRequest;
+//        $req->setStartDsr("10");
+        $req->setPageSize("20");
+        $req->setPageNo("1");
+        $req->setPlatform("2");
+//        $req->setEndTkRate("1234");
+//        $req->setStartTkRate("1234");
+//        $req->setEndPrice("1000");
+//        $req->setStartPrice("1");
+        $req->setIsOverseas("false");
+        $req->setIsTmall(isset($params['isTmall']) ? true : false);
+        $req->setSort("tk_total_sales_des");
+//        $req->setItemloc("杭州");
+//        $req->setCat("16,18");
+        $req->setQ($q);
+        $req->setMaterialId("2836");
+        $req->setHasCoupon("true");
+//        $req->setIp("13.2.33.4");
+        $req->setAdzoneId($this->thirdPid);
+//        $req->setNeedFreeShipment("true");
+//        $req->setNeedPrepay("true");
+//        $req->setIncludePayRate30("true");
+//        $req->setIncludeGoodRate("true");
+//        $req->setIncludeRfdRate("true");
+//        $req->setNpxLevel("2");
+//        $req->setEndKaTkRate("1234");
+//        $req->setStartKaTkRate("1234");
+//        $req->setDeviceEncrypt("MD5");
+//        $req->setDeviceValue("xxx");
+//        $req->setDeviceType("IMEI");
+//        $req->setLockRateEndTime("1567440000000");
+//        $req->setLockRateStartTime("1567440000000");
+//        $req->setLongitude("121.473701");
+//        $req->setLatitude("31.230370");
+//        $req->setCityCode("310000");
+//        $req->setSellerIds("1,2,3,4");
+//        $req->setSpecialId("2323");
+//        $req->setRelationId("3243");
+//        $req->setPageResultKey("abcdef");
+//        $req->setUcrowdId("1");
+//        $ucrowd_rank_items = new \Ucrowdrankitems;
+//        $ucrowd_rank_items->commirate="1000";
+//        $ucrowd_rank_items->price="10.12";
+//        $ucrowd_rank_items->item_id="542808901898";
+//        $req->setUcrowdRankItems(json_encode($ucrowd_rank_items));
+        $resp = $c->execute($req);
+        return $resp;
+    }
+
+    /**
+     * 官方活动转链接
+     * https://open.taobao.com/api.htm?docId=48340&docType=2&scopeId=18294
+     */
+    public function activity(){
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkActivityInfoGetRequest;
+        $req->setAdzoneId($this->thirdPid);
+//        $req->setSubPid("mm_1_2_3");
+//        $req->setRelationId("123");
+        $req->setActivityMaterialId("20150318020000462");
+        $req->setUnionId("demo");
+        $resp = $c->execute($req);
+        pre($resp);die;
+    }
+
+    /**
+     * 单个商品信息查询
+     * @param $goodsId
+     */
+    public function itemInfo($strGoodsId)
+    {
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkItemInfoGetRequest;
+        $req->setNumIids($strGoodsId);
+        $req->setPlatform(1);
+        $resp = $c->execute($req);
+        return $resp->results->n_tbk_item ?? [];
+    }
+
+    /**
+     * 物料权益
+     * https://open.taobao.com/api.htm?docId=52700&docType=2&scopeId=16518
+     */
+    public function promotion()
+    {
+        $c = new \TopClient;
+        $c->appkey = $this->appkey;
+        $c->secretKey = $this->secret;
+        $req = new \TbkDgOptimusPromotionRequest;
+        $req->setPageSize("10");
+        $req->setPageNum("1");
+        $req->setAdzoneId($this->thirdPid);
+        $req->setPromotionId("37116");
+        $resp = $c->execute($req);
+        pree($resp);
     }
 
 }
