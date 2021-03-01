@@ -100,7 +100,7 @@ class TaobaoLogic
         $c->secretKey = $this->secret;
         $req = new \TbkTpwdCreateRequest();
         $req->setText($text);
-        $req->setUrl($url);
+        $req->setUrl($url); 
         $req->setLogo($logo_url);
         $resp = $c->execute($req);
         return $resp->data ?? [];
