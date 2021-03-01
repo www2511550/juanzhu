@@ -32,6 +32,15 @@
                     </div>
                 </div>
 
+                <div class="layui-form-item">
+                    <label class="layui-form-label">授权session</label>
+                    <div class="layui-input-block">
+                        <input type="text" name="tbk_session" autocomplete="off"
+                               placeholder="已绑定可以不用填写"
+                               class="layui-input value1">
+                    </div>
+                </div>
+
                 <div class="layui-form-item" style="text-align: center">
                     <button class="layui-btn" type="button" onclick="get()">生 成</button>
                 </div>
@@ -72,7 +81,8 @@
     function get(){
         var content = $("[name='content']").val();
         var pid = $("[name='pid']").val();
-        $.post('/tool/to-self-url', {content: content,pid:pid}, function (data) {
+        var tbk_session = $("[name='tbk_session']").val();
+        $.post('/tool/to-self-url', {content: content,pid:pid,tbk_session:tbk_session}, function (data) {
             if (0 == data.status) {
                 layui.use('layer', function(){
                   layui.layer.msg(data.info);
