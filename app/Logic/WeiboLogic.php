@@ -89,7 +89,7 @@ class WeiboLogic{
             $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url='.urlencode($url)))).'&allowRedirect=1';
         }
 
-        return $this->tcn($long_url);
+        return $this->tcn($long_url); 
     }
 
     /**
