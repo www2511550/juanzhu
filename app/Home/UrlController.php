@@ -54,14 +54,14 @@ class UrlController extends BaseController
      * 跳转京东
      * @param Request $request
      */
-    public function toJd(Request $request)
+    public function toJd(Request $request, UrlLogic $urlLogic)
     {
         $key = $request->route('key');
-        if (is_mobile()){
-            header('Location:sinaweibo://browser/close?scheme=openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"https://u.jd.com/ih7ggQm"}');
+        if ($urlLogic->is_weibo_app()){
+            header('Location:sinaweibo://browser/close?scheme=openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"https://u.jd.com/'.$key.'"}');
             die;
         }
-        header('location:https://u.jd.com/ih7ggQm');
+        header('location:https://u.jd.com/'.$key);
         die;
     }
 
