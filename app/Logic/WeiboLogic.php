@@ -57,20 +57,12 @@ class WeiboLogic{
         // https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=tbopen://m.taobao.com/tbopen/index.html?h5Url=https://s.click.taobao.com/C9hKsqu&allowRedirect=1
         if ($type == 'toTb'){
 //            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo%3A%2F%2Fbrowser%2Fclose%3Fscheme%3Dsinaweibo%253A%252F%252Fbrowser%253Furl%253Dhttp%25253A%25252F%25252F'.$long_url.'?%25252FPKUna0VG%2526allowRedirect%253D1%2526disable_sinaurl%253D1';
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=tbopen://m.taobao.com/tbopen/index.html?h5Url=' . $long_url . '&allowRedirect=1';
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url='.urlencode($long_url)))).'&allowRedirect=1';
         }else{
             $long_url = urlencode($long_url);
         }
 
-        $url = 'http://www.f4cklangzi.cn/api/create.html';
-        $params = [
-            'original_url' => $long_url,
-            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
-            'mode' => 3,
-        ];
-        $result = http($url, $params);
-        $data = json_decode($result, true);
-        return $data['code'] == 0 ? $data['data']['short_url'] : '';
+        return $this->tcn($long_url);
 
         // 第三方接口
 //        $url = 'http://api.ft12.com/api.php';
@@ -80,6 +72,40 @@ class WeiboLogic{
 //        ];
 //        $ft12 = http($url, $params);
 //        return $ft12 ?: '';
+    }
+
+    /**
+     * 微博跳转淘宝，京东，拼多多等app
+     * @param $url
+     * @param $type
+     */
+    public function wbToApp($url, $type)
+    {
+        if ($type == 'jd'){
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"'.$url.'"}'))).'&allowRedirect=1';
+        }elseif($type == 'pdd'){
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url='.urlencode($url)))).'&allowRedirect=1';
+        }else{
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url='.urlencode($url)))).'&allowRedirect=1';
+        }
+
+        return $this->tcn($long_url);
+    }
+
+    /**
+     * 微博短链接
+     */
+    public function tcn($long_url)
+    {
+        $url = 'http://www.f4cklangzi.cn/api/create.html';
+        $params = [
+            'original_url' => $long_url,
+            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
+            'mode' => 3,
+        ];
+        $result = http($url, $params);
+        $data = json_decode($result, true);
+        return $data['code'] == 0 ? $data['data']['short_url'] : '';
     }
 
     /**

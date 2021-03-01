@@ -10,6 +10,7 @@ namespace App\Home;
 use App\Logic\TaobaoLogic;
 use App\Logic\ToolLogic;
 use App\Logic\UrlLogic;
+use App\Logic\WeiboLogic;
 use App\Model\Url;
 use App\Model\UrlUser;
 use App\Service\HaodankuService;
@@ -240,16 +241,16 @@ class ToolController extends BaseController
     /**
      * 淘宝短链接生成
      */
-    public function shortUrl(Request $request, UrlLogic $urlLogic)
+    public function shortUrl(Request $request, ToolLogic $toolLogic)
     {
         if ($request->method() == 'POST') {
             if (!($url = $request->get('url')) || strpos($request->get('url'), 'http') !== 0) {
                 return ['status' => 0, 'info' => '请输入正确的链接地址！'];
             }
-            if (!(strpos($url, 'uland.taobao.com') || strpos($url, 's.click.taobao.com'))){
-                return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com和uland.taobao.com域名！']);
+            if (!(strpos($url, 'm.tb.cn') || strpos($url, 's.click.taobao.com'))){
+                return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com和m.tb.cn域名！']);
             }
-            return $urlLogic->getShortUrl($url, intval($_COOKIE['url_uid']));
+            return $toolLogic->getWeiboShortUrl($url, 'tb');
         } else {
             return view('tool.shortUrl');
         }
@@ -262,10 +263,10 @@ class ToolController extends BaseController
     {
         $longUrl = $request->get('longUrl');
         $type = $request->get('type');
-        if (!in_array($type, ['pinduoduo', 'jd']) || !$longUrl){
+        if (!in_array($type, ['pdd', 'jd']) || !$longUrl){
             return ['status'=>0, 'info'=>'参数错误！'];
         }
-        if ($type == 'pinduoduo' && !strpos($longUrl, 'pinduoduo.com')){
+        if ($type == 'pdd' && !strpos($longUrl, 'pinduoduo.com')){
             return response()->json(['status' => 0, 'info' => '非拼多多链接不支持转换！']);
         }
         if ($type == 'jd' && !strpos($longUrl, 'jd.com')){
@@ -411,15 +412,11 @@ class ToolController extends BaseController
 
     public function test(Request $request)
     {
-        $url = 'http://api.web.ecapi.cn/taoke/doItemHighCommissionPromotionLinkByAll';
-        $params = [
-            'apkey' => '5c42cb82-d83d-f473-1268-f65d14e8f62e',
-            'tbname' => '惜惜faras',
-            'pid' => 'mm_113220731_2218350342_111200050341',
-            'content' => '5.0，YSVOcCSU3s9信 https://m.tb.cn/h.4PXOdeo?sm=1701e6  南极人袜子男士短袜纯棉防臭吸汗夏季薄款船袜低帮短筒隐形潮夏天',
-        ];
-        $result = json_decode(http($url, $params), true);
-        pre($result);die;
+//        $url = 'https://p.pinduoduo.com/ygZcZjcX';
+        $url = 'https://u.jd.com/ih7ggQm';
+        $weiboLogic = new WeiboLogic();
+        $data = $weiboLogic->wbToApp($url, 'jd');
+        pre($data);die;
 
 //        $url = 'https://api.open.21ds.cn/apiv1/sclicktoid';
 //        $params = [

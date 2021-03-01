@@ -188,12 +188,8 @@ class ToolLogic
      */
     public function getWeiboShortUrl($longUrl, $type)
     {
-        $baseShortUrl = 'onsales.top/toapp.php';
-        $pos = strpos($longUrl, '//')+2;
-        $url = substr($longUrl, $pos);
-        $strUrl = $baseShortUrl.'?u='.$url.'&t='.$type.'&';
         $weiboLogic = new WeiboLogic();
-        $shortUrl = $weiboLogic->shortUrl($strUrl, 'toTb');
+        $shortUrl = $weiboLogic->wbToApp($longUrl, $type);
 
         return [
             'status' => 1,

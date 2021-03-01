@@ -9,6 +9,8 @@
                 <a class="" href="javascript:;"><i class="layui-icon layui-icon-app"></i> 淘宝客工具箱</a>
                 <dl class="layui-nav-child">
                     <dd><a href="/tool/weibo-to-taobao">微博跳淘宝</a></dd>
+                    <dd><a href="/tool/weibo-to-pinduoduo">微博跳拼多多</a></dd>
+                    <dd><a href="/tool/weibo-to-jd">微博跳京东</a></dd>
                     <dd><a href="/tool/short-url">淘宝短链接</a></dd>
                     <dd><a href="/tool/to-self-url">他人链接转换</a></dd>
                     <dd><a href="/tool/tkl-decrypt">淘口令解密</a></dd>

@@ -28,6 +28,8 @@ Route::group(['namespace' => 'Home'], function () {
     // 工具类路由
     Route::get('/', 'ToolController@index')->name('tool.index');
     Route::any('/tool/weibo-to-taobao', 'ToolController@weiboToTaobao')->name('tool.weiboToTaobao');
+    Route::any('/tool/weibo-to-pinduoduo', 'ToolController@weiboToPinduoduo')->name('tool.weiboToPinduoduo');
+    Route::any('/tool/weibo-to-jd', 'ToolController@weiboToJd')->name('tool.weiboToJd');
     Route::any('/tool/tkl-create', 'ToolController@tklCreate')->name('tool.tklCreate');
     Route::any('/tool/short-url', 'ToolController@shortUrl')->name('tool.shortUrl');
     Route::any('/tool/high-rate', 'ToolController@highRate')->name('tool.highRate');
@@ -40,10 +42,14 @@ Route::group(['namespace' => 'Home'], function () {
     Route::any('/tool/text-url', 'ToolController@textUrl')->name('tool.textUrl');
     Route::any('/tool/to-self-url', 'ToolController@toSelfUrl');
     Route::any('/tool/tkl-decrypt', 'ToolController@tklDecrypt');
+    Route::any('/tool/short', 'ToolController@short');
 
     // 高佣短链接
     Route::any('/tool/search', 'ToolController@search')->name('tool.search');
     Route::any('/tool/test', 'ToolController@test')->name('tool.test');
+
+    // 个人专属
+    Route::any('/tool/text', 'ToolController@text');
 
 
 });

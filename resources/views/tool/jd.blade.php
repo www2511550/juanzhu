@@ -7,19 +7,19 @@
 <div class="layui-body">
     <!-- 内容主体区域 -->
     <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;">
-        <legend>微博跳淘宝APP链接转换</legend>
+        <legend>微博跳京东APP链接转换</legend>
     </fieldset>
 
     <div class="layui-main">
         <div class="layui-form layui-form-pane" action="">
             <blockquote class="layui-elem-quote layui-text">
-                输入淘宝优惠券网址,转换后的链接，可在新浪微博APP直接跳转淘宝APP,可防止微博导购拦截，提高成交率，免费转换。<br/>
-                <span style="color: red">注：目前只支持s.click.taobao.com、或m.tb.cn三种域名</span>
+                输入京东优惠券网址,转换后的链接，可在新浪微博APP直接跳转京东APP,可防止微博导购拦截，提高成交率，免费转换。<br/>
+                <span style="color: red">注：目前只支持u.jd.com域名</span>
             </blockquote>
             <div class="layui-form-item">
-                <label class="layui-form-label">淘宝链接</label>
+                <label class="layui-form-label">京东链接</label>
                 <div class="layui-input-block" style="width:50%">
-                    <input type="text" id="longUrl" placeholder="例如：https://s.click.taobao.com/xxxxxx"
+                    <input type="text" id="longUrl" placeholder="例如：https://u.jd.com/xxxxxx"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
@@ -37,11 +37,11 @@
             </div>
 
             {{--<div class="layui-form-item">--}}
-                {{--<label class="layui-form-label">淘口令</label>--}}
-                {{--<div class="layui-input-inline" style="width:50%">--}}
-                    {{--<input type="text" id="tkl" lay-verify="required" autocomplete="off" class="layui-input">--}}
-                {{--</div>--}}
-                {{--<button class="layui-btn click_copy">复制</button>--}}
+            {{--<label class="layui-form-label">淘口令</label>--}}
+            {{--<div class="layui-input-inline" style="width:50%">--}}
+            {{--<input type="text" id="tkl" lay-verify="required" autocomplete="off" class="layui-input">--}}
+            {{--</div>--}}
+            {{--<button class="layui-btn click_copy">复制</button>--}}
             {{--</div>--}}
         </div>
     </div>
@@ -53,12 +53,12 @@
         var longUrl = $('#longUrl').val();
         if (!longUrl) {
             layui.use('layer', function(){
-              layui.layer.msg('请输淘宝链接');
+              layui.layer.msg('请输京东链接');
             })
             return false;
         }
         $('#shortUrl').val('');
-        $.post('/tool/short-url', {url: longUrl}, function (data) {
+        $.post('/tool/short', {longUrl: longUrl,  type:'jd'}, function (data) {
             if (0 == data.status) {
                 layui.use('layer', function(){
                   layui.layer.msg(data.info);
