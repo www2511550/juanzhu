@@ -75,6 +75,11 @@ class ToolController extends BaseController
             if (!$username || !$password) {
                 return response()->json(['status' => 0, 'info' => '用户名或密码不能为空！']);
             }
+            // 用户名改用邮箱，方便后续找回
+            $pattern = "/^([0-9A-Za-z\\-_\\.]+)@([0-9a-z]+\\.[a-z]{2,3}(\\.[a-z]{2})?)$/i";
+            if (!preg_match($pattern, $username)) {
+                return response()->json(['status' => 0, 'info' => '请输入正确的邮箱格式！']);
+            }
 
             $user = UrlUser::where('username', $username)->first();
             if ($user->id) {

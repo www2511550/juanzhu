@@ -19,7 +19,7 @@
         <div class="layui-input-inline">
             <!-- 用户名 -->
             <div class="layui-inline" style="width: 85%">
-                <input type="text" id="user" name="username" required  lay-verify="required" placeholder="请输入用户名" autocomplete="off" class="layui-input">
+                <input type="text" id="user" name="username" required  lay-verify="required" placeholder="请输入邮箱用户名" autocomplete="off" class="layui-input">
             </div>
             <!-- 对号 -->
             <div class="layui-inline">
