@@ -8,6 +8,7 @@
 namespace App\Logic;
 
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\DB;
 
 class ToolLogic
 {
@@ -190,6 +191,20 @@ class ToolLogic
     {
         $weiboLogic = new WeiboLogic();
         $shortUrl = $weiboLogic->wbToApp($longUrl, $type);
+
+        // 数据记录
+        try {
+            $strIp = request()->getClientIp();
+            DB::table('wb_url_record')->insert([
+                'user_id' => 0,
+                'url' => $longUrl,
+                'short_url' => $shortUrl,
+                'ip' => $strIp,
+                'long_ip' => ip2long($strIp),
+            ]);
+        } catch (\Exception $re) {
+            // noop - there is no hasPrototype method
+        }
 
         return [
             'status' => 1,
