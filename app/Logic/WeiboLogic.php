@@ -63,15 +63,6 @@ class WeiboLogic{
         }
 
         return $this->tcn($long_url);
-
-        // 第三方接口
-//        $url = 'http://api.ft12.com/api.php';
-//        $params = [
-//            'url' => $long_url,
-//            'apikey' => '18674221127@1c78d4115dca542fb187695500eb0cac'
-//        ];
-//        $ft12 = http($url, $params);
-//        return $ft12 ?: '';
     }
 
     /**
@@ -81,15 +72,29 @@ class WeiboLogic{
      */
     public function wbToApp($url, $type)
     {
-        if ($type == 'jd'){
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"'.$url.'"}'))).'&allowRedirect=1';
-        }elseif($type == 'pdd'){
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url='.urlencode($url)))).'&allowRedirect=1';
-        }else{
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme='.urlencode('sinaweibo://browser/close?scheme='.urlencode('sinaweibo://openadapp?scheme='.urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url='.urlencode($url)))).'&allowRedirect=1';
+        if ($type == 'jd') {
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
+        } elseif ($type == 'pdd') {
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url=' . urlencode($url)))) . '&allowRedirect=1';
+        } else {
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url)))) . '&allowRedirect=1';
         }
 
-        return $this->tcn($long_url); 
+        $tcn = $this->tcn($long_url);
+        if (!$tcn) {
+            // 官方文档 https://3w.cn/api.html
+            $url = 'http://api.3w.cn/api.htm';
+            $params = [
+                'url' => $long_url,
+                'key' => '5fd101c16926889baf76d4727c@3b3b6f5efc764d3dc514cd37ba52a710',
+                'domain' => '4',
+                'expireDate' => date('Y-m-d H:i:s',strtotime('+1 year')), // 永久
+            ];
+            $ft12 = http($url, $params);
+            return $ft12 ?: '';
+        }
+
+        return $tcn;
     }
 
     /**
