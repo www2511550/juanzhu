@@ -574,15 +574,34 @@ class ToolController extends BaseController
                 return substr_replace($haystack, $replace, $pos, strlen($needle));
             };
             $_tmp = [];
-            foreach ($arr[0] as $v) {
-                if ('http' !== substr($v, 0, 4)) continue;
+            $total_url = count($arr[0]);
+            foreach ($arr[0] as $k =>$v) {
+                if ('http' !== substr($v, 0, 4)) {
+                    continue;
+                }
                 $tmp = explode($v, $str);
                 $_tmp[] = $tmp[0];
+                $self_short_url = '【链接为识别！】';
                 // 新浪url转成淘宝url
-                $taobaoUrl = $this->transferSinaUrl($v);
-                $selfUrl = $this->getSelfUrl($taobaoUrl, 1);
-                $_tmp[] = '拍 '.$selfUrl['url'].' [最右] 打不开链接的小可爱，复制('.($selfUrl['tkl'] ? mb_substr($selfUrl['tkl'], 1, -1, 'utf8') : '' ).')后打开手淘';
+                if (strpos($v, 'jd.com')){
+                    $result = json_decode(http('http://tk.2yhq.top/api/tbk/jd-goods', ['url'=>$v]), true);
+                    if ($result['status'] == 1){
+                        $self_short_url = $result['data']['shortUrl'];
+                    }
+                }elseif(strpos($v, 'pinduoduo.com')){
+                    $result = json_decode(http('http://tk.2yhq.top/api/tbk/pdd-goods', ['url'=>$v]), true);
+                    if ($result['status'] == 1){
+                        $self_short_url = $result['data']['mobileShortUrl'];
+                    }
+                }else{
+//                $taobaoUrl = $this->transferSinaUrl($v);
+//                $selfUrl = $this->getSelfUrl($taobaoUrl, 1);
+                }
+                $_tmp[] = $self_short_url;
                 $str = $replaceOnce($tmp[0] . $v, '', $str);
+                if ($total_url - 1 == $k) {
+                    $_tmp[] = $tmp[1];
+                }
             }
             $content = join($_tmp, ' ');
             return response()->json(['status' => 1, 'data' => $content]);
