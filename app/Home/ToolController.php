@@ -26,6 +26,7 @@ class ToolController extends BaseController
         parent::__construct();
         $this->user = UrlUser::find(intval($_COOKIE['url_uid']));
         $this->pid = 'mm_113220731_2218350342_111200050341';
+        view()->share('a','');
     }
 
 
@@ -144,6 +145,7 @@ class ToolController extends BaseController
         if ($request->method() == 'POST') {
 
         } else {
+            view()->share('a', 'weibo-to-taobao');
             return view('tool.weibo');
         }
 
@@ -157,6 +159,7 @@ class ToolController extends BaseController
         if ($request->method() == 'POST') {
 
         } else {
+            view()->share('a', 'weibo-to-pinduoduo');
             return view('tool.pinduoduo');
         }
 
@@ -170,6 +173,7 @@ class ToolController extends BaseController
         if ($request->method() == 'POST') {
 
         } else {
+            view()->share('a', 'weibo-to-jd');
             return view('tool.jd');
         }
 
@@ -200,6 +204,7 @@ class ToolController extends BaseController
 
             return response()->json(['status'=>1, 'data'=>$data]);
         } else {
+            view()->share('a', 'to-self-url');
             return view('tool.toSelfUrl');
         }
     }
@@ -220,6 +225,7 @@ class ToolController extends BaseController
 
             return response()->json(['status' => 1, 'data' => $data]);
         } else {
+            view()->share('a', 'tkl-decrypt');
             return view('tool.tklDecrypt');
         }
     }
@@ -239,6 +245,7 @@ class ToolController extends BaseController
             }
             return $toolLogic->createTkl($content, $toUrl, $request->get('logo_url', ''));
         } else {
+            view()->share('a', 'tkl-create');
             return view('tool.tklCreate');
         }
     }
@@ -257,6 +264,7 @@ class ToolController extends BaseController
             }
             return $toolLogic->getWeiboShortUrl($url, 'tb');
         } else {
+            view()->share('a', 'short-url');
             return view('tool.shortUrl');
         }
     }
@@ -306,6 +314,7 @@ class ToolController extends BaseController
 
             return $toolLogic->getHighRate($itemId, $arrPid[2], $arrPid[3], $tbkSession, $this->user->id);
         } else {
+            view()->share('a', 'high-rate');
             return view('tool.highRate');
         }
     }
@@ -329,6 +338,7 @@ class ToolController extends BaseController
 
             return response()->json(['status'=>1, 'data'=>$data]);
         } else {
+            view()->share('a', 'tbk-order');
             return view('tool.tbkOrder');
         }
     }
