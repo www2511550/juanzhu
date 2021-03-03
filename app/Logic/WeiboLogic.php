@@ -103,17 +103,62 @@ class WeiboLogic{
      */
     public function tcn($long_url)
     {
-        $url = 'http://www.f4cklangzi.cn/api/create.html';
-        $params = [
-            'original_url' => $long_url,
-            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
-            'mode' => 3,
-        ];
-        $result = http($url, $params);
-        $data = json_decode($result, true);
-        return $data['code'] == 0 ? $data['data']['short_url'] : '';
+        // 更换为百度短链接
+        $result =  $this->baiduShortUrl($long_url);
+        if ($result['Code'] === 0){
+            return $result['ShortUrl'];
+        }
+        return '';
+
+//        // 新浪微博短链接
+//        $url = 'http://www.f4cklangzi.cn/api/create.html';
+//        $params = [
+//            'original_url' => $long_url,
+//            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
+//            'mode' => 3,
+//        ];
+//        $result = http($url, $params);
+//        $data = json_decode($result, true);
+//        return $data['code'] == 0 ? $data['data']['short_url'] : '';
     }
 
+    /**
+     * 百度短网址
+     */
+    public function baiduShortUrl($long_url)
+    {
+        $host = 'https://dwz.cn';
+        $path = '/admin/v2/create';
+        $url = $host . $path;
+        $method = 'POST';
+        $content_type = 'application/json';
+
+        // TODO: 设置Token
+        $token = '78e820ba3298cac7f2f9dee1678aa18e';
+
+        // TODO：设置待注册长网址
+        $bodys = array('Url' => urldecode($long_url), 'TermOfValidity' => '1-year');
+
+        // 配置headers
+        $headers = array('Content-Type:' . $content_type, 'Token:' . $token);
+
+        // 创建连接
+        $curl = curl_init($url);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, $method);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_FAILONERROR, false);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HEADER, false);
+        curl_setopt($curl, CURLOPT_POST, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($bodys));
+
+        // 发送请求
+        $response = curl_exec($curl);
+        curl_close($curl);
+
+        // 读取响应
+        return json_decode($response, true);
+    }
     /**
      * 微博评论
      * @param string $id
