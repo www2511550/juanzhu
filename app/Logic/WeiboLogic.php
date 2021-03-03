@@ -73,7 +73,8 @@ class WeiboLogic{
     public function wbToApp($url, $type)
     {
         if ($type == 'jd') {
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
+            $long_url = 'https://h5.m.jd.com/dev/RLVegkgjdNJoM4Y1WsvAnKLD7Qw/index.html?appurl='.urlencode($url);
         } elseif ($type == 'pdd') {
             $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url=' . urlencode($url)))) . '&allowRedirect=1';
         } else {
