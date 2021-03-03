@@ -189,12 +189,20 @@ class ToolLogic
      */
     public function getWeiboShortUrl($longUrl, $type)
     {
+        $strIp = request()->getClientIp();
+        // 限制一小时内10次
+        $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
+            ->whereBetween('created_at', [date('Y-m-d H:i:s', strtotime('-1 hour')), date('Y-m-d H:i:s')])->count();
+        if ($count > 10){
+            return ['status'=>0, 'info'=>'已经达到限制次数，请联系管理员QQ'];
+        }
+
         $weiboLogic = new WeiboLogic();
         $shortUrl = $weiboLogic->wbToApp($longUrl, $type);
 
         // 数据记录
         try {
-            $strIp = request()->getClientIp();
+
             DB::table('wb_url_record')->insert([
                 'user_id' => 0,
                 'url' => $longUrl,
