@@ -206,7 +206,6 @@ class ToolLogic
 
         // 数据记录
         try {
-
             DB::table('wb_url_record')->insert([
                 'user_id' => $userId,
                 'url' => $longUrl,
