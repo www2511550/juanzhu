@@ -8,9 +8,9 @@
             <li class="layui-nav-item layui-nav-itemed">
                 <a class="" href="javascript:;"><i class="layui-icon layui-icon-app"></i> 淘宝客工具箱</a>
                 <dl class="layui-nav-child">
-                    <dd @if($a == 'weibo-to-taobao') class="layui-this" @endif><a href="/tool/weibo-to-taobao">微博跳淘宝<img src="/images/hot.gif"></a></dd>
-                    <dd @if($a == 'weibo-to-pinduoduo') class="layui-this" @endif><a href="/tool/weibo-to-pinduoduo">微博跳拼多多<img src="/images/new.gif"></a></dd>
-                    <dd @if($a == 'weibo-to-jd') class="layui-this" @endif><a href="/tool/weibo-to-jd">微博跳京东<img src="/images/new.gif"></a></dd>
+                    <dd @if($a == 'weibo-to-taobao') class="layui-this" @endif><a href="/tool/weibo-to-taobao">微博跳淘宝<img src="/hot.gif"></a></dd>
+                    <dd @if($a == 'weibo-to-pinduoduo') class="layui-this" @endif><a href="/tool/weibo-to-pinduoduo">微博跳拼多多<img src="/new.gif"></a></dd>
+                    <dd @if($a == 'weibo-to-jd') class="layui-this" @endif><a href="/tool/weibo-to-jd">微博跳京东<img src="/new.gif"></a></dd>
                     <dd @if($a == 'short-url') class="layui-this" @endif><a href="/tool/short-url">淘宝短链接</a></dd>
                     <dd @if($a == 'to-self-url') class="layui-this" @endif><a href="/tool/to-self-url">他人链接转换</a></dd>
                     <dd @if($a == 'tkl-decrypt') class="layui-this" @endif><a href="/tool/tkl-decrypt">淘口令解密</a></dd>
