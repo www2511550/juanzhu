@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <link rel="Shortcut Icon" href="wbtool.ico" type="image/x-icon" />
+    <link rel="Shortcut Icon" href="/wbtool.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <title>淘客工具箱-微博短链接跳转淘宝_京东_拼多多</title>
     <meta name="keywords" content="微博跳转淘宝,微博链接直接跳转淘宝,微博短链接,微博跳转京东,淘客工具箱">
@@ -32,6 +32,9 @@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a href="/tool/login" id="login">登录</a>
+                </li>
+                <li class="layui-nav-item">
+                    <a href="/tool/register" id="login">注册</a>
                 </li>
             </ul>
         @endif
