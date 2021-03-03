@@ -27,6 +27,7 @@ Route::group(['namespace' => 'Home'], function () {
 
     // 工具类路由
     Route::get('/', 'ToolController@index')->name('tool.index');
+    Route::any('/wb', 'ToolController@wbapp')->name('tool.wbapp');
     Route::any('/tool/weibo-to-taobao', 'ToolController@weiboToTaobao')->name('tool.weiboToTaobao');
     Route::any('/tool/weibo-to-pinduoduo', 'ToolController@weiboToPinduoduo')->name('tool.weiboToPinduoduo');
     Route::any('/tool/weibo-to-jd', 'ToolController@weiboToJd')->name('tool.weiboToJd');

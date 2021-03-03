@@ -29,7 +29,13 @@ class ToolController extends BaseController
         view()->share('a','');
     }
 
-
+    /**
+     * 微博跳app生产页面
+     */
+    public function wbapp(Request $request)
+    {
+        return view('tool.wbapp');
+    }
     /**
      * 登陆
      */
@@ -273,7 +279,7 @@ class ToolController extends BaseController
      */
     public function short(Request $request, ToolLogic $toolLogic)
     {
-        $longUrl = $request->get('longUrl');
+        $longUrl = $request->get('longUrl') ?: $request->get('url');
         $type = $request->get('type');
         if (!in_array($type, ['pdd', 'jd']) || !$longUrl){
             return ['status'=>0, 'info'=>'参数错误！'];
