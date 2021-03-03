@@ -189,7 +189,7 @@ class ToolLogic
      */
     public function getWeiboShortUrl($longUrl, $type)
     {
-
+        $userId = isset($_COOKIE['url_uid']) ? intval($_COOKIE['url_uid']) : 0;
         $strIp = request()->getClientIp();
         // 限制一小时内10次
         $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
@@ -205,7 +205,7 @@ class ToolLogic
         try {
 
             DB::table('wb_url_record')->insert([
-                'user_id' => 0,
+                'user_id' => $userId,
                 'url' => $longUrl,
                 'short_url' => $shortUrl,
                 'ip' => $strIp,
