@@ -12,6 +12,7 @@
     </fieldset>
 
     <p style="text-align: center;margin-top: 50px;line-height: 50px;font-size: 20px;">打赏作者</p>
+
     <p style="text-align: center">
         <img src="{{ asset('images/tool/weixin_reward.jpg') }}" alt="" style="width: 20%;">
     </p>
