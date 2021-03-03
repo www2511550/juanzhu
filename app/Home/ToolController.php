@@ -52,7 +52,6 @@ class ToolController extends BaseController
             if ($user->password != md5(md5('url' . $password))) {
                 return response()->json(['status'=>0, 'info'=>'密码错误！']);
             }
-
             setcookie('url_uid', $user->id, time() + 7*24*3600, '/');
             setcookie('url_username', $user->username, time() + 7*24*3600, '/');
             setcookie('is_free', $user->is_free, time() + 7*24*3600, '/');
