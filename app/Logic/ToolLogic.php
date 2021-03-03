@@ -190,6 +190,9 @@ class ToolLogic
     public function getWeiboShortUrl($longUrl, $type)
     {
         $userId = isset($_COOKIE['url_uid']) ? intval($_COOKIE['url_uid']) : 0;
+        if (!$userId){
+            return ['status'=>0, 'info'=>'请登录后再使用！'];
+        }
         $strIp = request()->getClientIp();
         // 限制一小时内10次
         $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
