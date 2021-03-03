@@ -2,8 +2,11 @@
 <html>
 <head>
     <meta charset="utf-8">
+    <link rel="Shortcut Icon" href="wbtool.ico" type="image/x-icon" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    <title>淘宝客API开放平台</title>
+    <title>淘客工具箱-微博短链接跳转淘宝_京东_拼多多</title>
+    <meta name="keywords" content="微博跳转淘宝,微博链接直接跳转淘宝,微博短链接,微博跳转京东,淘客工具箱">
+    <meta name="description" content="淘客工具箱提供稳定的微博链接跳转淘宝APP的功能,实现微博里打开链接直接跳转手机淘宝APP,便于微博内推广淘宝链接">
     <link rel="stylesheet" href="{{ asset('layui/css/layui.css') }}">
     <script src="{{ asset('js/jquery.min.js') }}"></script>
 </head>
