@@ -11,7 +11,7 @@
 <body class="layui-layout-body">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
-        <div class="layui-logo">淘宝客API开放平台</div>
+        <div class="layui-logo"><a href="/" style="color: #009688;">淘宝客API开放平台</a></div>
 
         @if($_COOKIE['url_uid'])
             <ul class="layui-nav layui-layout-right">
