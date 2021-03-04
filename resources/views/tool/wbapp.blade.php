@@ -14,8 +14,6 @@
     <script src="{{ asset('js/jquery.min.js') }}"></script>
     <script src="{{ asset('js/layui.js') }}"></script>
     <style class="vjs-styles-defaults">
-
-
         .video-js {
             width: 300px;
             height: 150px;
