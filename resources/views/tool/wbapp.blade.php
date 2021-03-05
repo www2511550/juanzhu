@@ -185,7 +185,7 @@
         </div>
         <div class="row d-md-flex mt-4 text-center" style="justify-content: center;">
             <div class="col-sm-4 wow fadeIn" style="visibility: hidden; animation-name: none;">
-                <img class="img-fluid mx-auto d-block pb-3" src="/wbtotb.gif" alt="微博跳淘宝">
+                <img class="img-fluid mx-auto d-block pb-3" src="/wbtotb-min.gif" alt="微博跳淘宝">
             </div>
         </div>
     </div>
