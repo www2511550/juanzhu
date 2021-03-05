@@ -11,7 +11,7 @@
 </head>
 <body>
 
-<div class="login-main">
+<div class="login-main"  data-back-url="@if(isset($_GET['backUrl']) && $_GET['backUrl']){{ $_GET['backUrl'] }} @endif">
     <header class="layui-elip" style="width: 82%">注册页</header>
 
     <!-- 表单选项 -->
@@ -144,7 +144,8 @@
                 success:function(data){
                     if (data.status == 1) {
                         layer.msg('注册成功');
-                        location.href = "/tool/weibo-to-taobao";
+                        var backUrl = $('.login-main').attr('data-back-url');
+                        location.href = backUrl ? backUrl : "/tool/weibo-to-taobao";
                     }else {
                         layer.msg(data.info);
                     }

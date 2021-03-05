@@ -99,6 +99,20 @@
             <li class="nav-item mr-3">
                 <a class="nav-link page-scroll" href="/wb/#contact">联系客服</a>
             </li>
+            <li class="nav-item mr-3">
+                @if(isset($_COOKIE['url_uid']) && $_COOKIE['url_uid'])
+                    <a class="nav-link page-scroll"  style="display: inline-block" href="javascript:;">
+                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
+                        {{ $_COOKIE['url_username'] }}
+
+                    </a>
+                    <a class="nav-link page-scroll" style="display: inline-block" href="/tool/out">退出</a>
+                @else
+                    <a class="nav-link page-scroll" style="display: inline-block" href="/tool/login?backUrl=/wb">登录</a>
+                    <b style="color: white">|</b>
+                    <a class="nav-link page-scroll" style="display: inline-block" href="/tool/register?backUrl=/wb">注册</a>
+                @endif
+            </li>
         </ul>
     </div>
 </nav>
@@ -115,7 +129,7 @@
                     手机微博<span>直接</span>跳转淘宝APP打开指定链接（如商品链接、优惠券链接、淘宝客链接等等）
                 </p>
                 <p class="mt-4 lead">
-                    微博跳转交流QQ：379624432
+                    微博跳转交流QQ：<a href="http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin=379624432" target="_blank" style="color: white">379624432</a>
                 </p>
             </div>
             <div class="col-md-12 pt-6  d-md-block wow fadeIn"
@@ -309,6 +323,7 @@ $(document).ready(function(){
 
 
     $('.mkUrl').click(function(){
+        $("[name='desc']").val('');
         var title = $("[name='title']").val();
         var type = $('input[name="type"]:checked').val();
         if(title){
