@@ -13,7 +13,6 @@
 
 <div class="login-main"  data-back-url="@if(isset($_GET['backUrl']) && $_GET['backUrl']){{ $_GET['backUrl'] }} @endif">
     <header class="layui-elip" style="width: 82%">注册页</header>
-
     <!-- 表单选项 -->
     <form class="layui-form">
         <div class="layui-input-inline">
