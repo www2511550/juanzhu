@@ -10,6 +10,7 @@ namespace App\Home;
 use App\Logic\TaobaoLogic;
 use App\Logic\ToolLogic;
 use App\Logic\UrlLogic;
+use App\Logic\WeiboLogic;
 use App\Service\HaodankuService;
 use App\Service\ToolService;
 use Carbon\Carbon;
@@ -39,43 +40,94 @@ class DaidaiController extends BaseController
         if ($request->method() == 'POST') {
             $url = trim($request->get('content'));
             $pid = $request->get('pid');
+//            $tbkSession = $request->get('tbk_session', '70000100e0397191e7b27a9266f8ecffc79581814c1003e4d0ea76b5aa8e0576d412c172652123108');
+
             if (!$pid) {
                 return response()->json(['status' => 0, 'info' => '请选择联盟PID']);
+            }
+
+            // 判断链接所属
+            $params = ['url'=>$url, 'pid'=>$pid, 'from'=>'daidai'];
+            $weiboLogic = new WeiboLogic();
+            if (strpos($url, 'pinduoduo.com')){
+                // 检测pid是否选择正确
+                if (count(explode('_', $pid)) != 2){
+                    return ['status'=>1, 'data'=>'拼多多pid选择错误！'];
+                }
+                $request_url = 'http://tk.2yhq.top/api/tbk/pdd-goods';
+                $result = json_decode(http($request_url, $params), true);
+                if ($result['status']){
+                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'pdd');
+                    return ['status'=>1, 'data'=>$wb_short_url];
+                }
+                return $result;
+            }elseif(strpos($url, 'jd.com')){
+                // 检测pid是否选择正确
+                if (count(explode('_', $pid)) != 1){
+                    return ['status'=>1, 'data'=>'京东pid选择错误！'];
+                }
+                $request_url = 'http://tk.2yhq.top/api/tbk/jd-goods';
+                $result = json_decode(http($request_url, $params), true);
+                if ($result['status']){
+                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'jd');
+                    return ['status'=>1, 'data'=>$wb_short_url];
+                }
+                return $result;
+            }
+            return ['status'=> 0, 'info'=>'只支持jd.com和pinduoduo.com链接'];
+
+
+
+            // 淘宝链接处理
+/*            if (!$tbkSession) {
+                return response()->json(['status' => 0, 'info' => '请选择授权session']);
             }
             if (0 === strpos($url, 'http')) {
                 $url = $this->transferSinaUrl($url);
             }
-            $quanInfo = $toolLogic->getQuanUrlByPid($url, $pid, 1);
-            if (!$quanInfo) { // 无法获取的使用大淘客接口查询
-                $goodsInfo = $toolLogic->getGoodsInfo($url);
-                // 通过大淘客接口给他转换pid
-                $url = $this->getHighRateById($goodsInfo['num_iid'], $pid);
-                if (!$url) {
-                    return response()->json(['status' => 0, 'info' => '未找到联盟商品']);
-                }
-                // 转短链接
-                $short = $toolLogic->getShortUrl($url);
-                if (!$short['status']) {
-                    return response()->json(['status' => 0, 'info' => '网络繁忙，稍后再试！']);
-                }
-                // $quanInfo变量重新复值
-                $quanInfo = [
-                    'coupon_short_url' => $short['data']['url'],
-                    'zk_final_price' => $goodsInfo['zk_final_price'],
-                    'title' => $goodsInfo['title'],
-                    'tbk_pwd' => $goodsInfo['tbk_pwd'],
-                ];
+            $quanInfo = $toolLogic->tklExplainAndConvert($url, $pid, $tbkSession);
+            if (!isset($quanInfo['status'])){
+                return response()->json(['status'=>0, 'info'=>'网络异常，稍后再试']);
             }
-            $weibo = (new UrlLogic())->getShortUrl($quanInfo['coupon_short_url'], 3);
-            $data = (isset($quanInfo['zk_final_price']) ? $quanInfo['zk_final_price'] : '')
-                . '【' . (isset($quanInfo['title']) ? $quanInfo['title'] : '') . '】'
-                . (isset($weibo['data']['url']) ? $weibo['data']['url'] : '') . ' ，('
-                . (isset($quanInfo['tbk_pwd']) ? $quanInfo['tbk_pwd'] : '') . ')。';
+            if (!$quanInfo['status']){
+                return response()->json(['status'=>0, 'info'=>'未找到联盟商品']);
+            }
+            // 微博防屏蔽短链接
+            $arrTkl = explode(' ', $quanInfo['data']['tkl'][0]);
+            $shortUrl = (new WeiboLogic())->wbToApp($arrTkl['1'], 'tb');
+            $data = '【'.$quanInfo['data']['title'][0].'】'.$shortUrl.'，('.$arrTkl[0].')';*/
 
-            return response()->json(['status' => 1, 'data' => $data]);
+
+//            if (!$quanInfo) { // 无法获取的使用大淘客接口查询
+//                $goodsInfo = $toolLogic->getGoodsInfo($url);
+//                // 通过大淘客接口给他转换pid
+//                $url = $this->getHighRateById($goodsInfo['num_iid'], $pid);
+//                if (!$url) {
+//                    return response()->json(['status' => 0, 'info' => '未找到联盟商品']);
+//                }
+//                // 转短链接
+//                $short = $toolLogic->getShortUrl($url);
+//                if (!$short['status']) {
+//                    return response()->json(['status' => 0, 'info' => '网络繁忙，稍后再试！']);
+//                }
+//                // $quanInfo变量重新复值
+//                $quanInfo = [
+//                    'coupon_short_url' => $short['data']['url'],
+//                    'zk_final_price' => $goodsInfo['zk_final_price'],
+//                    'title' => $goodsInfo['title'],
+//                    'tbk_pwd' => $goodsInfo['tbk_pwd'],
+//                ];
+//            }
+//            $weibo = (new UrlLogic())->getShortUrl($quanInfo['coupon_short_url'], 3);
+//            $data = (isset($quanInfo['zk_final_price']) ? $quanInfo['zk_final_price'] : '')
+//                . '【' . (isset($quanInfo['title']) ? $quanInfo['title'] : '') . '】'
+//                . (isset($weibo['data']['url']) ? $weibo['data']['url'] : '') . ' ，('
+//                . (isset($quanInfo['tbk_pwd']) ? $quanInfo['tbk_pwd'] : '') . ')。';
+
+//            return response()->json(['status' => 1, 'data' => $data]);
         } else {
             // pid配置
-            $config = DB::table('daidai_config')->where('status', 1)->get();
+            $config = DB::table('daidai_config')->where('status', 1)->orderBy('id','desc')->get();
             return is_mobile() ? view('daidai.wap.oneLink', ['config' => $config, 'action'=>'oneLink']) : view('daidai.oneLink', ['config' => $config]);
         }
     }
@@ -104,12 +156,13 @@ class DaidaiController extends BaseController
                 return substr_replace($haystack, $replace, $pos, strlen($needle));
             };
             $_tmp = [];
-            foreach ($arr[0] as $v) {
+            $total_url = count($arr[0]);
+            foreach ($arr[0] as $k => $v) {
                 if ('http' !== substr($v, 0, 4)) continue;
                 $tmp = explode($v, $str);
                 $_tmp[] = $tmp[0];
                 $strUrl = '';
-                // 新浪url转成淘宝url
+                /*// 新浪url转成淘宝url
                 $url = $this->transferSinaUrl($v);
                 $quanInfo = $toolLogic->getQuanUrlByPid($url, $pid, 1);
                 if ($quanInfo) {
@@ -129,16 +182,42 @@ class DaidaiController extends BaseController
                 if ($strUrl) {
                     $weibo = (new UrlLogic())->getShortUrl($strUrl, 3);
                     $strUrl = isset($weibo['data']['url']) ? $weibo['data']['url'] : '';
+                }*/
+
+                // 新版20210305
+                $params = ['url'=>$v, 'pid'=>$pid, 'from'=>'daidai'];
+                $strUrl = '【链接未识别！】';
+                if (strpos($v, 'jd.com')){
+                    // 检测pid是否选择正确
+                    if (count(explode('_', $pid)) != 1){
+                        return ['status'=>1, 'data'=>'京东pid选择错误！'];
+                    }
+                    $result = json_decode(http('http://tk.2yhq.top/api/tbk/jd-goods', $params), true);
+                    if ($result['status'] == 1){
+                        $strUrl = $result['data']['shortUrl'];
+                    }
+                }elseif(strpos($v, 'pinduoduo.com')){
+                    // 检测pid是否选择正确
+                    if (count(explode('_', $pid)) != 2){
+                        return ['status'=>1, 'data'=>'拼多多pid选择错误！'];
+                    }
+                    $result = json_decode(http('http://tk.2yhq.top/api/tbk/pdd-goods', $params), true);
+                    if ($result['status'] == 1){
+                        $strUrl = $result['data']['mobileShortUrl'];
+                    }
                 }
 
                 $_tmp[] = $strUrl;
                 $str = $replaceOnce($tmp[0] . $v, '', $str);
+                if ($total_url - 1 == $k) {
+                    $_tmp[] = $tmp[1];
+                }
             }
             $content = join($_tmp, ' ');
             return response()->json(['status' => 1, 'data' => $content]);
         } else {
             // pid配置
-            $config = DB::table('daidai_config')->where('status', 1)->get();
+            $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
             return is_mobile() ? view('daidai.wap.moreLink', ['config'=>$config, 'action'=>'moreLink']) : view('daidai.moreLink', ['config'=>$config]);
         }
     }
