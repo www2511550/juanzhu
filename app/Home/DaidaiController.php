@@ -76,8 +76,6 @@ class DaidaiController extends BaseController
             }
             return ['status'=> 0, 'info'=>'只支持jd.com和pinduoduo.com链接'];
 
-
-
             // 淘宝链接处理
 /*            if (!$tbkSession) {
                 return response()->json(['status' => 0, 'info' => '请选择授权session']);
@@ -161,7 +159,7 @@ class DaidaiController extends BaseController
                 if ('http' !== substr($v, 0, 4)) continue;
                 $tmp = explode($v, $str);
                 $_tmp[] = $tmp[0];
-                $strUrl = '';
+                $strUrl = '【链接未识别！】';
                 /*// 新浪url转成淘宝url
                 $url = $this->transferSinaUrl($v);
                 $quanInfo = $toolLogic->getQuanUrlByPid($url, $pid, 1);
@@ -186,7 +184,6 @@ class DaidaiController extends BaseController
 
                 // 新版20210305
                 $params = ['url'=>$v, 'pid'=>$pid, 'from'=>'daidai'];
-                $strUrl = '【链接未识别！】';
                 if (strpos($v, 'jd.com')){
                     // 检测pid是否选择正确
                     if (count(explode('_', $pid)) != 1){
