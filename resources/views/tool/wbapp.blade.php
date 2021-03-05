@@ -2,7 +2,7 @@
 <html lang="zh-cmn-Hans">
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <link rel="Shortcut Icon" href="http://wt.ddtool.cn/favicon.ico" type="image/x-icon">
+    <link rel="Shortcut Icon" href="/wbtool.ico" type="image/x-icon">
     <title>微博跳转助手-微博短链接跳转淘宝_京东_拼多多APP</title>
     <meta name="keywords" content="微博跳转淘宝,微博链接直接跳转淘宝,微博短链接,微博跳转京东">
     <meta name="description" content="微博跳转助手提供稳定的微博链接跳转淘宝APP的功能,实现微博里打开链接直接跳转手机淘宝APP,便于微博内推广淘宝链接">
@@ -185,7 +185,7 @@
         </div>
         <div class="row d-md-flex mt-4 text-center" style="justify-content: center;">
             <div class="col-sm-4 wow fadeIn" style="visibility: hidden; animation-name: none;">
-                <img class="img-fluid mx-auto d-block pb-3" src="http://wt.ddtool.cn/img/1606972100442.gif" alt="">
+                <img class="img-fluid mx-auto d-block pb-3" src="/wbtotb.gif" alt="微博跳淘宝">
             </div>
         </div>
     </div>
