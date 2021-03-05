@@ -17,15 +17,15 @@
                     <textarea name="content" id="content" placeholder="请一行一个链接...." class="layui-textarea"></textarea>
                 </div>
             </div>
-            <div class="layui-form-item">
-                <select name="pid" lay-verify="required" style="display: block;width: 350px;height: 38px;border: 1px solid #dedede;">
-                    @if($config)
-                        @foreach($config as $vo)
-                            <option value="{{ $vo->pid }}">pid-{{ $vo->name.'-'.$vo->pid }}</option>
-                        @endforeach
-                    @endif
-                </select>
-            </div>
+            {{--<div class="layui-form-item">--}}
+                {{--<select name="pid" lay-verify="required" style="display: block;width: 350px;height: 38px;border: 1px solid #dedede;">--}}
+                    {{--@if($config)--}}
+                        {{--@foreach($config as $vo)--}}
+                            {{--<option value="{{ $vo->pid }}">pid-{{ $vo->name.'-'.$vo->pid }}</option>--}}
+                        {{--@endforeach--}}
+                    {{--@endif--}}
+                {{--</select>--}}
+            {{--</div>--}}
             <div class="layui-form-item" style="text-align: center;width:50%">
                 <button class="layui-btn" id="mkUrl">转换文本链接</button>
                 <span class="loading-word" style="color: red;margin-left: 30px;display: none">  ...转链接中...</span>
