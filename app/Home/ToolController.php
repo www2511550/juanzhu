@@ -596,7 +596,7 @@ class ToolController extends BaseController
                 }
                 $tmp = explode($v, $str);
                 $_tmp[] = $tmp[0];
-                $self_short_url = '【链接为识别！】';
+                $self_short_url = '【链接未识别！】';
                 // 新浪url转成淘宝url
                 if (strpos($v, 'jd.com')){
                     $result = json_decode(http('http://tk.2yhq.top/api/tbk/jd-goods', ['url'=>$v]), true);
