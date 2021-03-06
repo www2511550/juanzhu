@@ -15,6 +15,7 @@
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo"><a href="/" style="color: #009688;">淘宝客API开放平台</a></div>
+        <div style="position: absolute;top: 20px;left: 35%;color: red"><a href="http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin=379624432" target="_blank" style="color: red">定制需求或问题咨询QQ(379624432)</a></div>
 
         @if($_COOKIE['url_uid'])
             <ul class="layui-nav layui-layout-right">

@@ -197,7 +197,7 @@ class ToolLogic
         // 限制一小时内10次
         $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
             ->whereBetween('created_at', [date('Y-m-d H:i:s', strtotime('-1 hour')), date('Y-m-d H:i:s')])->count();
-        if ($count > 10){
+        if ($count > 5){
             return ['status'=>0, 'info'=>'已经达到限制次数，请联系管理员QQ'];
         }
 
@@ -205,14 +205,15 @@ class ToolLogic
         $shortUrl = $weiboLogic->wbToApp($longUrl, $type);
 
         // 数据记录
+        $insertData = [
+            'user_id' => $userId,
+            'url' => $longUrl,
+            'short_url' => $shortUrl,
+            'ip' => $strIp,
+            'long_ip' => ip2long($strIp),
+        ];
         try {
-            DB::table('wb_url_record')->insert([
-                'user_id' => $userId,
-                'url' => $longUrl,
-                'short_url' => $shortUrl,
-                'ip' => $strIp,
-                'long_ip' => ip2long($strIp),
-            ]);
+            DB::table('wb_url_record')->insert($insertData);
         } catch (\Exception $re) {
             // noop - there is no hasPrototype method
         }
