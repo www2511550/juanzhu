@@ -9,6 +9,7 @@ namespace App\Logic;
 
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class ToolLogic
 {
@@ -213,6 +214,7 @@ class ToolLogic
             'long_ip' => ip2long($strIp),
         ];
         try {
+            Log::info('wb_url_record:'.json_encode($insertData));
             DB::table('wb_url_record')->insert($insertData);
         } catch (\Exception $re) {
             // noop - there is no hasPrototype method
