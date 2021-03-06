@@ -273,8 +273,15 @@ class ToolController extends BaseController
                 $url = $result['data']['url'];
             }else{
                 // 链接
-                if (!(strpos($url, 'm.tb.cn') || strpos($url, 's.click.taobao.com'))){
-                    return response()->json(['status' => 0, 'info' => '链接只支持s.click.taobao.com和m.tb.cn域名！']);
+                if (!(strpos($url, 'm.tb.cn') || strpos($url, 's.click.taobao.com') || strpos($url, 'uland.taobao.com'))){
+                    return response()->json(['status' => 0, 'info' => '链接只支持s.click.taobao.com、m.tb.cn和uland.taobao.com域名！']);
+                }
+                if (strpos($url, 'uland.taobao.com')){
+                    $requestData = json_decode(http('http://tk.2yhq.top/api/tbk/short-url', ['url'=>$url]), true);
+                    if (!$requestData['status']){
+                        return $requestData;
+                    }
+                    $url = $requestData['data'];
                 }
             }
 
