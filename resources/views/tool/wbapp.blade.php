@@ -139,7 +139,7 @@
                         <label class="layui-form-label">原始链接</label>
                         <div class="layui-input-block">
                             <input type="text" name="title" autocomplete="off" required="" value="" lay-verify="required"
-                                   placeholder="请输入原始链接" class="layui-input">
+                                   placeholder="请输入原始链接或口令" class="layui-input">
                         </div>
                     </div>
                     <div class="layui-form-item">

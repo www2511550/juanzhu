@@ -281,4 +281,27 @@ class ToolLogic
         return ['status'=>1, 'data'=>$arrData];
     }
 
+    /**
+     * 口令链接提取
+     * @param $tkl
+     * @return array
+     */
+    public function tklUrlGet($tkl, $is_sclick = 0)
+    {
+        $result = json_decode(http('https://api.taokouling.com/tkl/tkljm', ['apikey' => 'CyraHBTSTR', 'tkl' => $tkl]), true);
+        if ($result['code'] != 1) {
+            return ['status' => 0, 'info' => $result['msg']];
+        }
+        if ($is_sclick){
+            $requestData = json_decode(http('http://tk.2yhq.top/api/tbk/short-url', ['url'=>$result['url']]), true);
+            if (!$requestData['status']){
+                return $requestData;
+            }
+            $result['url'] = $requestData['data'];
+        }
+
+        return ['status'=>1, 'data'=>$result, 'info'=>'succeesful!'];
+
+    }
+
 }

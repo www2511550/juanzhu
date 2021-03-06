@@ -256,17 +256,28 @@ class ToolController extends BaseController
     }
 
     /**
-     * 淘宝短链接生成
+     * 淘宝短链接生成，支持口令和链接
      */
     public function shortUrl(Request $request, ToolLogic $toolLogic)
     {
         if ($request->method() == 'POST') {
-            if (!($url = $request->get('url')) || strpos($request->get('url'), 'http') !== 0) {
-                return ['status' => 0, 'info' => '请输入正确的链接地址！'];
+            if (!($url = $request->get('url'))) {
+                return ['status' => 0, 'info' => '请输入正确的链接地址或口令！'];
             }
-            if (!(strpos($url, 'm.tb.cn') || strpos($url, 's.click.taobao.com'))){
-                return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com和m.tb.cn域名！']);
+            // 判断是链接还是口令
+            if (strpos($url, 'http') !== 0){
+                $result = $toolLogic->tklUrlGet($url, 1);
+                if (!$result['status']){
+                    return $result;
+                }
+                $url = $result['data']['url'];
+            }else{
+                // 链接
+                if (!(strpos($url, 'm.tb.cn') || strpos($url, 's.click.taobao.com'))){
+                    return response()->json(['status' => 0, 'info' => '链接只支持s.click.taobao.com和m.tb.cn域名！']);
+                }
             }
+
             return $toolLogic->getWeiboShortUrl($url, 'tb');
         } else {
             view()->share('a', 'short-url');
