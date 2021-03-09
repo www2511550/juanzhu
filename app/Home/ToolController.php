@@ -709,4 +709,58 @@ class ToolController extends BaseController
         return $tkUrl;
     }
 
+    /**
+     * 创建淘礼金
+     * @param Request $request
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View|mixed
+     */
+    public function createTlj(Request $request)
+    {
+        if ($request->method() == 'POST'){
+            $params = $request->all();
+            if (strpos($params['item_id'], 'http') === 0){
+                preg_match('/id=([0-9]*)?/',$params['item_id'], $arr);
+                if (!isset($arr[1])){
+
+                }
+                $params['item_id'] = $arr[1];
+            }
+            return json_decode(http('http://tk.2yhq.top/api/tbk/create-tlj', $params), true);
+        }else{
+            return view('tool.createTlj');
+        }
+    }
+
+
+    /**
+     * 商品查询
+     */
+    public function itemDetail(Request $request, TaobaoLogic $taobaoLogic)
+    {
+        $data = [];
+        $url = $request->get('url');
+        if (!$url){
+            return ['status'=>0, 'info'=>'缺失商品链接或ID'];
+        }
+        if (strpos($url, 'http') === 0){
+            $result = $taobaoLogic->search($url);
+        }else{
+            $result = $taobaoLogic->search($url, [], 1);
+        }
+        if (isset($result->result_list->map_data) && ($info = (array)$result->result_list->map_data)){
+            $data = [
+                'item_id' => $info['item_id'],
+                'pic_url' => $info['pict_url'],
+                'coupon_url' => $info['coupon_share_url'],
+                'price' => $info['zk_final_price'],
+                'coupon_amount' => $info['coupon_amount'],
+                'final_price' => bcsub($info['zk_final_price'], $info['coupon_amount'], 2),
+                'commission_rate' => bcdiv($info['commission_rate'], 10000, 2),
+                'yongjin' => bcmul(bcdiv($info['commission_rate'], 10000, 2), bcsub($info['zk_final_price'], $info['coupon_amount'], 2), 2),
+            ];
+            return ['status'=>1, 'data'=>$data];
+        }
+        return ['status'=>0, 'data'=>$data, 'info'=>'未查询到联盟商品'];
+    }
+
 }

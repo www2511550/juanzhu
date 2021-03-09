@@ -44,6 +44,8 @@ Route::group(['namespace' => 'Home'], function () {
     Route::any('/tool/to-self-url', 'ToolController@toSelfUrl');
     Route::any('/tool/tkl-decrypt', 'ToolController@tklDecrypt');
     Route::any('/tool/short', 'ToolController@short');
+    Route::any('/tool/create-tlj', 'ToolController@createTlj')->name('tool.createTlj');
+    Route::get('/tool/item-detail', 'ToolController@itemDetail')->name('tool.itemDetail');
 
     // 高佣短链接
     Route::any('/tool/search', 'ToolController@search')->name('tool.search');
