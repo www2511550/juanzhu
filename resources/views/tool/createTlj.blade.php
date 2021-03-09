@@ -73,7 +73,12 @@
             <input type="text" class="form-control" id="tkl" placeholder="" style="width:82%;display: inline-block">
             <button type="button" class="btn btn-success click_copy" style="float: right">复制</button>
         </div>
-        <div class="form-group" style="margin-top: 20px">
+        <div class="form-group">
+            <label for="exampleInputPassword1" style="display: block">商品标题：</label>
+            <input type="text" class="form-control" id="title" placeholder="" style="width:82%;display: inline-block">
+            <button type="button" class="btn btn-success click_copy" style="float: right;">复制</button>
+        </div>
+        <div class="form-group">
             <label for="exampleInputPassword1" style="display: block">微博短链接：</label>
             <input type="text" class="form-control" id="wbShort" placeholder="" style="width:82%;display: inline-block">
             <button type="button" class="btn btn-success click_copy" style="float: right;">复制</button>
@@ -102,7 +107,7 @@
                 $('#item-detail').show();
                 $('#user_number').val(1);
                 $('#tlj_amount').val(1);
-                $('b.get_money').text(data.data.yongjin - 1);
+                $('b.get_money').text(accSubtr(data.data.yongjin, 1));
             }
         }).error(function (err) {
 
@@ -126,6 +131,7 @@
             } else {
                 $('#wbShort').val(data.data.tb_short);
                 $('#tkl').val(data.data.tkl);
+                $('#title').val(data.data.title);
             }
         }).error(function (err) {
             alert('服务器错误，请联系管理员！');
@@ -146,7 +152,16 @@
             alert('复制失败');
         });
     }
-
+ // 减法运算
+ function accSubtr(arg1,arg2){
+    var r1,r2,m,n;
+    try{r1=arg1.toString().split(".")[1].length;}catch(e){r1=0;}
+    try{r2=arg2.toString().split(".")[1].length;}catch(e){r2=0;}
+    m=Math.pow(10,Math.max(r1,r2));
+    //动态控制精度长度
+    n=(r1>=r2)?r1:r2;
+    return ((arg1*m-arg2*m)/m).toFixed(n);
+}
 </script>
 
 
