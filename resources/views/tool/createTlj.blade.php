@@ -85,6 +85,7 @@
         </div>
     </div>
 
+
     <h5 style="text-align: center;font-size: 12px;margin-top: 50px;"><a href="http://www.miitbeian.gov.cn/" target="_blank" style="color: #222">粤ICP备16100236号</a>Copyright @2017-{{date('Y')}} 卷猪科技 juanzhuzhu.com/url All Rights Reserved</h5>
 
 </div>
