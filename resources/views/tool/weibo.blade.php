@@ -13,13 +13,15 @@
     <div class="layui-main">
         <div class="layui-form layui-form-pane" action="">
             <blockquote class="layui-elem-quote layui-text">
+                <a  style="color: red" href="/wb" target="_blank"><<<点我体验三合一（淘宝、京东、拼多多）新版转链>>></点我体验三合一></a><br>
                 输入淘宝优惠券网址,转换后的链接，可在新浪微博APP直接跳转淘宝APP,可防止微博导购拦截，提高成交率，免费转换。<br/>
-                <span style="color: red">注：目前只支持s.click.taobao.com、或m.tb.cn三种域名</span>
+                <span style="color: red">注：目前只支持s.click.taobao.com、或m.tb.cn两种域名</span>
+
             </blockquote>
             <div class="layui-form-item">
-                <label class="layui-form-label">淘宝链接</label>
+                <label class="layui-form-label">链接或口令</label>
                 <div class="layui-input-block" style="width:50%">
-                    <input type="text" id="longUrl" placeholder="例如：https://s.click.taobao.com/xxxxxx"
+                    <input type="text" id="longUrl" placeholder="请输入淘宝短链接或淘口令"
                            autocomplete="off" class="layui-input">
                 </div>
             </div>
