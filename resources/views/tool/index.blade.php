@@ -21,9 +21,6 @@
         <p>聚划算热销精选 <a href="https://hk.juanzhuzhu.com/?tmp=juhuasuan&code=av0m3t&f=web&demo_type=7" target="_blank">查看演示</a></p>
         <p>淘客CMS购物 <a href="http://juanzhuzhu.com/" target="_blank">查看演示</a></p>
     </div>
-    <p style="text-align: center">
-        打赏作者：<img src="{{ asset('images/tool/weixin_reward.jpg') }}" alt="" style="width: 20%;">
-    </p>
 </div>
 <style>
     div.need>p{text-align: center;font-size: 14px;width: 250px;margin: 0 auto;line-height: 30px;}
