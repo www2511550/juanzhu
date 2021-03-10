@@ -3,19 +3,24 @@
  * TOP API: taobao.tbk.dg.newuser.order.get request
  * 
  * @author auto create
- * @since 1.0, 2018.04.09
+ * @since 1.0, 2019.07.04
  */
 class TbkDgNewuserOrderGetRequest
 {
+	/** 
+	 * 活动id， 活动名称与活动ID列表，请参见https://tbk.bbs.taobao.com/detail.html?appId=45301&postId=8599277
+	 **/
+	private $activityId;
+	
 	/** 
 	 * mm_xxx_xxx_xxx的第三位
 	 **/
 	private $adzoneId;
 	
 	/** 
-	 * 结束注册时间
+	 * 结束时间，当活动为淘宝活动，表示最晚结束时间；当活动为支付宝活动，表示最晚绑定时间；当活动为天猫活动，表示最晚领取红包的时间
 	 **/
-	private $endRegisterTime;
+	private $endTime;
 	
 	/** 
 	 * 页码，默认1
@@ -28,12 +33,23 @@ class TbkDgNewuserOrderGetRequest
 	private $pageSize;
 	
 	/** 
-	 * 开始注册时间
+	 * 开始时间，当活动为淘宝活动，表示最早注册时间；当活动为支付宝活动，表示最早绑定时间；当活动为天猫活动，表示最早领取红包时间
 	 **/
-	private $startRegisterTime;
+	private $startTime;
 	
 	private $apiParas = array();
 	
+	public function setActivityId($activityId)
+	{
+		$this->activityId = $activityId;
+		$this->apiParas["activity_id"] = $activityId;
+	}
+
+	public function getActivityId()
+	{
+		return $this->activityId;
+	}
+
 	public function setAdzoneId($adzoneId)
 	{
 		$this->adzoneId = $adzoneId;
@@ -45,15 +61,15 @@ class TbkDgNewuserOrderGetRequest
 		return $this->adzoneId;
 	}
 
-	public function setEndRegisterTime($endRegisterTime)
+	public function setEndTime($endTime)
 	{
-		$this->endRegisterTime = $endRegisterTime;
-		$this->apiParas["end_register_time"] = $endRegisterTime;
+		$this->endTime = $endTime;
+		$this->apiParas["end_time"] = $endTime;
 	}
 
-	public function getEndRegisterTime()
+	public function getEndTime()
 	{
-		return $this->endRegisterTime;
+		return $this->endTime;
 	}
 
 	public function setPageNo($pageNo)
@@ -78,15 +94,15 @@ class TbkDgNewuserOrderGetRequest
 		return $this->pageSize;
 	}
 
-	public function setStartRegisterTime($startRegisterTime)
+	public function setStartTime($startTime)
 	{
-		$this->startRegisterTime = $startRegisterTime;
-		$this->apiParas["start_register_time"] = $startRegisterTime;
+		$this->startTime = $startTime;
+		$this->apiParas["start_time"] = $startTime;
 	}
 
-	public function getStartRegisterTime()
+	public function getStartTime()
 	{
-		return $this->startRegisterTime;
+		return $this->startTime;
 	}
 
 	public function getApiMethodName()
@@ -102,6 +118,7 @@ class TbkDgNewuserOrderGetRequest
 	public function check()
 	{
 		
+		RequestCheckUtil::checkNotNull($this->activityId,"activityId");
 		RequestCheckUtil::checkMaxValue($this->pageSize,100,"pageSize");
 		RequestCheckUtil::checkMinValue($this->pageSize,1,"pageSize");
 	}

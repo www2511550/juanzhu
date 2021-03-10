@@ -3,12 +3,12 @@
  * TOP API: taobao.tbk.tpwd.create request
  * 
  * @author auto create
- * @since 1.0, 2018.04.04
+ * @since 1.0, 2020.10.08
  */
 class TbkTpwdCreateRequest
 {
 	/** 
-	 * 扩展字段JSON格式
+	 * [已废弃]扩展字段JSON格式
 	 **/
 	private $ext;
 	
