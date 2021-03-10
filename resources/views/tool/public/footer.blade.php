@@ -1,7 +1,6 @@
 <div class="layui-footer">
     <!-- 底部固定区域 -->
-    <a href="http://www.miitbeian.gov.cn/" target="_blank" style="color: #222">粤ICP备16100236号</a> Copyright @2017-{{date('Y')}} 卷猪科技
-    &nbsp;&nbsp;&nbsp;&nbsp; QQ：<a href="http://wpa.qq.com/msgrd?v=3&site=qq&menu=yes&uin=379624432" target="_blank" style="color: red">379624432</a>
+    <a href="http://www.miitbeian.gov.cn/" target="_blank" style="color: #222">粤ICP备16100236号</a> Copyright @2017-{{date('Y')}} 嘿淘网络
 </div>
 </div>
 
