@@ -187,6 +187,7 @@ class ToolLogic
 
     /**
      * 获取微博跳转app短链接
+     * @from 个人定制接口专属不限制
      */
     public function getWeiboShortUrl($longUrl, $type)
     {

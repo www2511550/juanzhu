@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width,user-scalable=no" />
     <meta name="format-detection" content="telephone=no" />
     <meta name="apple-mobile-web-app-capable" content="yes" />
-    <title>批量转链接</title>
+    <title>批量转口令</title>
     {{--<link rel="stylesheet" href="https://cdn.bootcss.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">--}}
     <link rel="stylesheet" href="{{ asset('css/bootstrap40.min.css') }}">
     <script src="{{ asset('js/jquery.min.js') }}"></script>
@@ -25,18 +25,18 @@
 
 <div class="container" style="margin-bottom: 10px;">
     <div class="page-header">
-        <h3 style="margin: 20px 0;text-align: center">批量转链接</h3>
+        <h3 style="margin: 20px 0;text-align: center">批量转口令</h3>
     </div>
 
 
     <div class="content-main">
         <div class="form-group">
-            <textarea name="content" id="content" placeholder="请输入带链接的文本" class="form-control" style="height: 180px;"></textarea>
+            <textarea name="content" id="content" placeholder="请输入带口令的文本" class="form-control" style="height: 180px;"></textarea>
         </div>
 
         <div class="content-secondary" style="text-align: center">
-            <button type="button" class="btn btn-info" id="mkUrl">转换文本链接</button>
-            <span class="loading-word" style="color: red;margin-left: 30px;display: none">  ...转链接中...</span>
+            <button type="button" class="btn btn-info" id="mkUrl">转换口令</button>
+            <span class="loading-word" style="color: red;margin-left: 30px;display: none">  ...口令转换中...</span>
         </div>
 
         <div class="form-group" style="margin-top: 20px;text-align: center">
