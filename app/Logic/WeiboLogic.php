@@ -11,6 +11,7 @@ require app_path('../vendor/weibo-sdk/saetv2.ex.class.php');
 
 use DB;
 use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 class WeiboLogic{
 
@@ -92,7 +93,18 @@ class WeiboLogic{
                 'expireDate' => date('Y-m-d H:i:s',strtotime('+1 year')), // 永久
             ];
             $ft12 = http($url, $params);
+            try {
+                Log::info('wbToApp:'.json_encode(['url'=>$url, 'wb_short'=>$tcn]));
+            } catch (\Exception $re) {
+                // noop - there is no hasPrototype method
+            }
             return $ft12 ?: '';
+        }
+
+        try {
+            Log::info('wbToApp:'.json_encode(['url'=>$url, 'wb_short'=>$tcn]));
+        } catch (\Exception $re) {
+            // noop - there is no hasPrototype method
         }
 
         return $tcn;
