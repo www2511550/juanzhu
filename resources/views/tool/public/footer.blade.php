@@ -4,8 +4,6 @@
 </div>
 </div>
 
-
-
 <script type="text/javascript" src="{{ asset('layui/layui.js') }}"></script>
 <script>
 //JavaScript代码区域
