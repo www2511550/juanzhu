@@ -61,6 +61,7 @@ class ToolController extends BaseController
             setcookie('url_uid', $user->id, time() + 7*24*3600, '/');
             setcookie('url_username', $user->username, time() + 7*24*3600, '/');
             setcookie('is_free', $user->is_free, time() + 7*24*3600, '/');
+            setcookie('end_time', $user->end_time, time() + 7 * 24 * 3600, '/');
 
             return response()->json(['status'=>1, 'info'=>'success']);
         } else {
@@ -92,13 +93,14 @@ class ToolController extends BaseController
                 return response()->json(['status' => 0, 'info' => '用户名已存在！！']);
             }
 
+            $end_time = strtotime(' 1 day'); // 试用期一天
             $insertId = UrlUser::insertGetId([
                 'username' => $username,
                 'password' => md5(md5('url' . $password)),
                 'status' => 1,
                 'is_free' => 1,
                 'email' => $email,
-                'end_time' => strtotime(' 1 day'),
+                'end_time' => $end_time,
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
@@ -110,6 +112,7 @@ class ToolController extends BaseController
             setcookie('url_uid', $insertId, time() + 7 * 24 * 3600, '/');
             setcookie('url_username', $username, time() + 7 * 24 * 3600, '/');
             setcookie('is_free', 1, time() + 7 * 24 * 3600, '/');
+            setcookie('end_time', $end_time, time() + 7 * 24 * 3600, '/');
 
             return response()->json(['status' => 1, 'info' => 'success']);
         } else {
@@ -619,7 +622,7 @@ class ToolController extends BaseController
                 $tmp = explode($v, $str);
                 $_tmp[] = $tmp[0];
                 $self_short_url = '【链接未识别！】';
-                // 新浪url转成淘宝url
+                // 转自己的短链接
                 if (strpos($v, 'jd.com')){
                     $result = json_decode(http('http://tk.2yhq.top/api/tbk/jd-goods', ['url'=>$v]), true);
                     if ($result['status'] == 1){

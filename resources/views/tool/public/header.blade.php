@@ -12,7 +12,7 @@
 </head>
 
 <body class="layui-layout-body">
-<img src="/images/tool/toolma.jpg" alt="嘿淘工具交流群" style="width: 200px;height: auto;z-index:9999999;position: absolute;right: 10px;top: 60px;">
+<img src="/images/tool/toolma.jpg" alt="嘿淘工具交流群" style="width: 200px;height: auto;z-index:9999999;position: absolute;right: 10px;top: 110px;">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo"><a href="/" style="color: #009688;">淘宝客API开放平台</a></div>
@@ -22,8 +22,10 @@
             <ul class="layui-nav layui-layout-right">
                 <li class="layui-nav-item">
                     <a href="javascript:;">
-                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">
-                        {{ $_COOKIE['url_username'] }}
+                        <img src="http://t.cn/RCzsdCq" class="layui-nav-img">{{ $_COOKIE['url_username'] }}
+                        @if(isset($_COOKIE['end_time']) && $_COOKIE['end_time'])
+                            <b style="color: red;position: absolute;top: 45px;right: 0px;">到期时间：{{ date('Y-m-d H:i', $_COOKIE['end_time']) }}</b>
+                        @endif
                     </a>
                     <dl class="layui-nav-child" style="text-align: center">
                         <dd><a href="/tool/out">退出</a></dd>
