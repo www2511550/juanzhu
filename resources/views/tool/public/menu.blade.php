@@ -10,12 +10,15 @@
                 <dl class="layui-nav-child">
                     <dd @if($a == 'weibo-to-taobao') class="layui-this" @endif><a href="/tool/weibo-to-taobao">微博跳淘宝<img
                                     src="/hot.gif"></a></dd>
+                    <dd @if($a == 'text-tkl') class="layui-this" @endif><a href="/tool/text-tkl">淘口令批量转换<img
+                                    src="/new.gif"></a></dd>
                     <dd @if($a == 'weibo-to-pinduoduo') class="layui-this" @endif><a href="/tool/weibo-to-pinduoduo">微博跳拼多多<img
                                     src="/new.gif"></a></dd>
                     <dd @if($a == 'weibo-to-jd') class="layui-this" @endif><a href="/tool/weibo-to-jd">微博跳京东<img
                                     src="/new.gif"></a></dd>
+                    {{--<dd @if($a == 'text-url') class="layui-this" @endif><a href="/tool/text-url">批量转链接</a></dd>--}}
                     <dd @if($a == 'short-url') class="layui-this" @endif><a href="/tool/short-url">淘宝短链接</a></dd>
-                    <dd @if($a == 'to-self-url') class="layui-this" @endif><a href="/tool/to-self-url">他人链接转换</a></dd>
+                    <dd @if($a == 'to-self-url') class="layui-this" @endif><a href="/tool/to-self-url">他人转自己</a></dd>
                     <dd @if($a == 'tkl-decrypt') class="layui-this" @endif><a href="/tool/tkl-decrypt">淘口令解密</a></dd>
                     <dd @if($a == 'tkl-create') class="layui-this" @endif><a href="/tool/tkl-create">淘口令生成</a></dd>
                     <dd @if($a == 'tbk-order') class="layui-this" @endif><a href="/tool/tbk-order">淘宝订单查询</a></dd>

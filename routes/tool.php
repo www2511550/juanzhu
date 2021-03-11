@@ -41,6 +41,7 @@ Route::group(['namespace' => 'Home'], function () {
     Route::any('/tool/out', 'ToolController@out');
     Route::any('/tool/personal', 'ToolController@personal')->name('tool.personal');
     Route::any('/tool/text-url', 'ToolController@textUrl')->name('tool.textUrl');
+    Route::any('/tool/text-tkl', 'ToolController@textTkl')->name('tool.textTkl');
     Route::any('/tool/to-self-url', 'ToolController@toSelfUrl');
     Route::any('/tool/tkl-decrypt', 'ToolController@tklDecrypt');
     Route::any('/tool/short', 'ToolController@short');

@@ -646,62 +646,63 @@ class ToolController extends BaseController
             $content = join($_tmp, ' ');
             return response()->json(['status' => 1, 'data' => $content]);
         } else {
-
-            $str = '{"leixing":"400","type":"2003","robot_wxid":"wxid_8nbdgxheva4722","from_wxid":"20327713391@chatroom","from_name":"\u8c46\u6ce1\u514d\u5355??07\u7fa4","json_msg":"{\"group_name\":\"\u8c46\u6ce1\u514d\u5355??07\u7fa4\",\"group_wxid\":\"20327713391@chatroom\",\"guest\":{\"nickname\":\"\u598d\u7199\",\"wxid\":\"wxid_auhwlq6jh6yh22\"},\"inviter\":{\"nickname\":\"BETRAYAL\",\"wxid\":\"wxid_v7y2idjkifqz22\"}}"}';
-            $arr = json_decode($str, true);
-            $json_msg = json_decode($arr['json_msg'], true);
-            pre($json_msg);
-
             return view('tool.text');
         }
     }
 
     /**
      * 批量转淘口令
-     * @param $str
+     * @param $request
      * @return array|\Illuminate\Http\JsonResponse
      */
-    public function textTkl($str)
+    public function textTkl(Request $request)
     {
-        preg_match_all('/(\w{11})/', $str, $arr);
-        if (!$arr[0]) {
-            return ['status' => 0, 'info' => '未检测到口令'];
-        }
-        $replaceOnce = function ($needle, $replace, $haystack) {
-            $pos = strpos($haystack, $needle);
-            if ($pos === false) {
-                return $haystack;
+        if ($request->method() == 'POST'){
+            if (!($str = $request->get('content'))) {
+                return ['status' => 0, 'info' => '请输入需要转换的文本内容！'];
             }
-            return substr_replace($haystack, $replace, $pos, strlen($needle));
-        };
-        $_tmp = [];
-        $total_url = count($arr[0]);
-        $toolLogic = new ToolLogic();
-        $weiboLogic = new WeiboLogic();
-        foreach ($arr[0] as $k => $v) {
-            $tmp = explode($v, $str);
+            preg_match_all('/(\w{11})/', $str, $arr);
+            if (!$arr[0]) {
+                return ['status' => 0, 'info' => '未检测到口令'];
+            }
+            $replaceOnce = function ($needle, $replace, $haystack) {
+                $pos = strpos($haystack, $needle);
+                if ($pos === false) {
+                    return $haystack;
+                }
+                return substr_replace($haystack, $replace, $pos, strlen($needle));
+            };
+            $_tmp = [];
+            $total_url = count($arr[0]);
+            $toolLogic = new ToolLogic();
+            $weiboLogic = new WeiboLogic();
+            foreach ($arr[0] as $k => $v) {
+                $tmp = explode($v, $str);
 //            $_tmp[] = $tmp[0];
-            $_tmp[] = mb_substr($tmp[0], 0, -1, 'utf8'); // 特殊处理，口令左右两边符号去掉
-            $self_short_url = '【口令未识别！】';
-            // 口令转换
-            $strTkl = '¥' . $v . '¥';
-            $result = $toolLogic->tklUrlGet($strTkl, 1);
-            if ($result['status']) {
-                $self_short_url = $weiboLogic->wbToApp($result['data']['url'], 'tb');
-            }
+                $_tmp[] = mb_substr($tmp[0], 0, -1, 'utf8'); // 特殊处理，口令左右两边符号去掉
+                $self_short_url = '【口令未识别！】';
+                // 口令转换
+                $strTkl = '¥' . $v . '¥';
+                $result = $toolLogic->tklUrlGet($strTkl, 1);
+                if ($result['status']) {
+                    $self_short_url = $weiboLogic->wbToApp($result['data']['url'], 'tb');
+                }
 
-            $_tmp[] = $self_short_url;
-            $str = $replaceOnce($tmp[0] . $v, '', $str);
-            // 特殊处理，口令左右两边符号去掉
-            $str = mb_substr($str, 1, null,'utf8');
+                $_tmp[] = $self_short_url;
+                $str = $replaceOnce($tmp[0] . $v, '', $str);
+                // 特殊处理，口令左右两边符号去掉
+                $str = mb_substr($str, 1, null,'utf8');
 
-            if ($total_url - 1 == $k) {
+                if ($total_url - 1 == $k) {
 //                $_tmp[] = $tmp[1];
-                $_tmp[] = mb_substr($tmp[1], 1, null, 'utf8'); // 特殊处理，口令左右两边符号去掉
+                    $_tmp[] = mb_substr($tmp[1], 1, null, 'utf8'); // 特殊处理，口令左右两边符号去掉
+                }
             }
+            $content = join($_tmp, ' ');
+            return response()->json(['status' => 1, 'data' => $content]);
+        }else{
+            return view('tool.textTkl');
         }
-        $content = join($_tmp, ' ');
-        return response()->json(['status' => 1, 'data' => $content]);
     }
 
 
