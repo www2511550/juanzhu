@@ -30,7 +30,6 @@ class IndexController extends BaseController{
     public function __construct()
     {
         parent::__construct();
-
         // if(is_mobile() && !strpos(url()->current(), '/web/')){
 //            header("location:".url('/home/wap/index'));die;
         //   header("location:http://coupon.juanzhuzhu.com/index.php?r=index/wap");die;
@@ -88,6 +87,7 @@ class IndexController extends BaseController{
      */
     public function index(Request $request, IndexLogic $indexLogic)
     {
+        header("location:http://tool.juanzhuzhu.com");die;
         return view('home.index.indexDtk'); // 大淘客替代
 
         // 1、获取商品分类和对应的字体图标
