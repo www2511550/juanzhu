@@ -598,10 +598,6 @@ class ToolController extends BaseController
                 return ['status' => 0, 'info' => '请输入需要转换的文本内容！'];
             }
 
-            // 临时测试调用
-            return $this->textTkl($str);
-
-
             preg_match_all('/((http|ftp|https):\/\/)?([\w_-]+(?:(?:\.[\w_-]+)+))([\w.,@?^=%&:\/~+#-]*[\w@?^=%&\/~+#-])?/', $str, $arr);
             if (!$arr[0]) {
                 return ['status' => 0, 'info' => '未检测到链接'];
