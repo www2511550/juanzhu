@@ -14,7 +14,7 @@
         <div class="layui-form layui-form-pane" action="">
             <blockquote class="layui-elem-quote layui-text">
                 <a  style="color: red" href="/wb" target="_blank"><<<点我体验三合一（淘宝、京东、拼多多）新版转链>>></点我体验三合一></a><br>
-                输入拼多多优惠券网址,转换后的链接，可在新浪微博APP直接跳转拼多多APP,可防止微博导购拦截，提高成交率，免费转换。<br/>
+                输入拼多多优惠券网址,转换后的链接，可在新浪微博APP直接跳转拼多多APP,可防止微博导购拦截，提高成交率。<br/>
                 <span style="color: red">注：目前只支持p.pinduoduo.com域名</span>
             </blockquote>
             <div class="layui-form-item">

@@ -7,6 +7,7 @@
  */
 namespace App\Logic;
 
+use App\Model\UrlUser;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -196,12 +197,20 @@ class ToolLogic
             return ['status'=>0, 'info'=>'请登录后再使用！'];
         }
         $strIp = request()->getClientIp();
-        // 限制一小时内10次
-        $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
-            ->whereBetween('created_at', [date('Y-m-d H:i:s', strtotime('-1 hour')), date('Y-m-d H:i:s')])->count();
-        if ($count > 5){
-            return ['status'=>0, 'info'=>'已经达到限制次数，请联系管理员QQ'];
+        // 免费用户试用期一天
+        $urlUser = UrlUser::find($userId);
+        if (!isset($urlUser->id)){
+            return ['status'=>0, 'info'=>'用户不存在，请联系管理员QQ'];
         }
+        if ($urlUser->end_time <= time()){
+            return ['status'=>0, 'info'=>'使用已到期，请联系管理员QQ'];
+        }
+        // 限制一小时内10次
+//        $count = DB::table('wb_url_record')->select('id')->where('long_ip', ip2long($strIp))
+//            ->whereBetween('created_at', [date('Y-m-d H:i:s', strtotime('-1 hour')), date('Y-m-d H:i:s')])->count();
+//        if ($count > 5){
+//            return ['status'=>0, 'info'=>'已经达到限制次数，请联系管理员QQ'];
+//        }
 
         $weiboLogic = new WeiboLogic();
         $shortUrl = $weiboLogic->wbToApp($longUrl, $type);

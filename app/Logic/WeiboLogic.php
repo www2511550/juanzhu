@@ -115,23 +115,26 @@ class WeiboLogic{
      */
     public function tcn($long_url)
     {
-        // 更换为百度短链接
-        $result =  $this->baiduShortUrl($long_url);
-        if ($result['Code'] === 0){
-            return $result['ShortUrl'];
-        }
-        return '';
+        // 新浪微博短链接
+        $url = 'http://www.f4cklangzi.cn/api/create.html';
+        $params = [
+            'original_url' => $long_url,
+            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
+            'mode' => 3,
+        ];
+        $result = http($url, $params);
+        $data = json_decode($result, true);
+        $wb_short = $data['code'] == 0 ? $data['data']['short_url'] : '';
 
-//        // 新浪微博短链接
-//        $url = 'http://www.f4cklangzi.cn/api/create.html';
-//        $params = [
-//            'original_url' => $long_url,
-//            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
-//            'mode' => 3,
-//        ];
-//        $result = http($url, $params);
-//        $data = json_decode($result, true);
-//        return $data['code'] == 0 ? $data['data']['short_url'] : '';
+        // 微博不能用，切换更换为百度短链接
+        if (!$wb_short){
+            $result =  $this->baiduShortUrl($long_url);
+            if ($result['Code'] === 0){
+                $wb_short = $result['ShortUrl'];
+            }
+        }
+
+        return $wb_short;
     }
 
     /**

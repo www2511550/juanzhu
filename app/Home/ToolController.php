@@ -98,7 +98,7 @@ class ToolController extends BaseController
                 'status' => 1,
                 'is_free' => 1,
                 'email' => $email,
-                'end_time' => strtotime(' 7 day'),
+                'end_time' => strtotime(' 1 day'),
                 'created_at' => date('Y-m-d H:i:s'),
                 'updated_at' => date('Y-m-d H:i:s'),
             ]);
@@ -643,6 +643,12 @@ class ToolController extends BaseController
             $content = join($_tmp, ' ');
             return response()->json(['status' => 1, 'data' => $content]);
         } else {
+
+            $str = '{"leixing":"400","type":"2003","robot_wxid":"wxid_8nbdgxheva4722","from_wxid":"20327713391@chatroom","from_name":"\u8c46\u6ce1\u514d\u5355??07\u7fa4","json_msg":"{\"group_name\":\"\u8c46\u6ce1\u514d\u5355??07\u7fa4\",\"group_wxid\":\"20327713391@chatroom\",\"guest\":{\"nickname\":\"\u598d\u7199\",\"wxid\":\"wxid_auhwlq6jh6yh22\"},\"inviter\":{\"nickname\":\"BETRAYAL\",\"wxid\":\"wxid_v7y2idjkifqz22\"}}"}';
+            $arr = json_decode($str, true);
+            $json_msg = json_decode($arr['json_msg'], true);
+            pre($json_msg);
+
             return view('tool.text');
         }
     }
