@@ -53,10 +53,10 @@ class DaidaiController extends BaseController
                 $wb_short_url = $weiboLogic->wbToApp($url, 'tb');
             }
 
-            if ($wb_short_url){
-                return ['status'=>1, 'data'=>$wb_short_url];
+            if ($wb_short_url) {
+                return ['status' => 1, 'data' => $wb_short_url];
             }
-            return ['status'=> 0, 'info'=>'只支持jd.com，pinduoduo.com和taobo.com链接'];
+            return ['status' => 0, 'info' => '只支持jd.com，pinduoduo.com和taobo.com链接'];
 
 
 //            $params = ['url'=>$url, 'pid'=>$pid, 'from'=>'daidai'];
@@ -88,15 +88,15 @@ class DaidaiController extends BaseController
 //            }
         } else {
             // pid配置
-            $config = DB::table('daidai_config')->where('status', 1)->orderBy('id','desc')->get();
-            return is_mobile() ? view('daidai.wap.oneLink', ['config' => $config, 'action'=>'oneLink']) : view('daidai.oneLink', ['config' => $config]);
+            $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
+            return is_mobile() ? view('daidai.wap.oneLink', ['config' => $config, 'action' => 'oneLink']) : view('daidai.oneLink', ['config' => $config]);
         }
     }
 
     /**
      *链接批量转换
      */
-    public function moreLink(Request $request,  ToolLogic $toolLogic)
+    public function moreLink(Request $request, ToolLogic $toolLogic)
     {
         if ($request->method() == 'POST') {
             $str = $request->get('content');
@@ -143,7 +143,7 @@ class DaidaiController extends BaseController
         } else {
             // pid配置
             $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
-            return is_mobile() ? view('daidai.wap.moreLink', ['config'=>$config, 'action'=>'moreLink']) : view('daidai.moreLink', ['config'=>$config]);
+            return is_mobile() ? view('daidai.wap.moreLink', ['config' => $config, 'action' => 'moreLink']) : view('daidai.moreLink', ['config' => $config]);
         }
     }
 
@@ -155,7 +155,7 @@ class DaidaiController extends BaseController
         if ($request->method() == 'POST') {
 
         } else {
-            return is_mobile() ? view('daidai.wap.weibo', ['action'=>'weibo']) : view('daidai.weibo');
+            return is_mobile() ? view('daidai.wap.weibo', ['action' => 'weibo']) : view('daidai.weibo');
         }
 
     }
@@ -188,7 +188,7 @@ class DaidaiController extends BaseController
             if (!($url = $request->get('url')) || strpos($request->get('url'), 'http') !== 0) {
                 return ['status' => 0, 'info' => '请输入正确的链接地址！'];
             }
-            if (!(strpos($url, 'uland.taobao.com') || strpos($url, 's.click.taobao.com'))){
+            if (!(strpos($url, 'uland.taobao.com') || strpos($url, 's.click.taobao.com'))) {
                 return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com和uland.taobao.com域名！']);
             }
             return $urlLogic->getShortUrl($url, 3);
@@ -196,8 +196,8 @@ class DaidaiController extends BaseController
             return view('daidai.shortUrl');
         }
     }
-    
-    
+
+
     public function test(Request $request)
     {
 //        $url = 'https://api.open.21ds.cn/apiv1/sclicktoid';
@@ -215,8 +215,8 @@ class DaidaiController extends BaseController
             'tpwd' => '(sOzTbG36Tse)',
         ];
         $result = http($url, $params);
-        pre($result);die;
-
+        pre($result);
+        die;
 
 
 //        $baseUrl = 'http://api.vephp.com/directhc';
@@ -231,7 +231,8 @@ class DaidaiController extends BaseController
 //            'pid' => 'mm_17474597_13388964_120156186',
         ];
         $result = json_decode(http($baseUrl, $params), true);
-        pre($result);die;
+        pre($result);
+        die;
 
         $toolService = new ToolService();
         $data = $toolService->sclicktoid('https://s.click.taobao.com/xDTIkIw');
@@ -241,7 +242,7 @@ class DaidaiController extends BaseController
         $data = $haodankuService->search('544113036971');
         pre($data);
     }
-    
+
     /**
      * 文本链接转换
      */
@@ -297,7 +298,7 @@ class DaidaiController extends BaseController
      */
     public function transferSinaUrl($url)
     {
-        if (strpos($url, 'taobao.com') || strpos($url, 'tb.cn')){
+        if (strpos($url, 'taobao.com') || strpos($url, 'tb.cn')) {
             return $url;
         }
         $tkUrl = '';
@@ -308,7 +309,7 @@ class DaidaiController extends BaseController
 //            pre($header['Location']);die;
             if (array_key_exists('Location', $header)) {
                 $url = $header['Location'];
-                if (is_array($url)){
+                if (is_array($url)) {
                     $url = array_pop($url);
                 }
                 return $url ?: '';
@@ -331,19 +332,19 @@ class DaidaiController extends BaseController
                 return ['status' => 0, 'info' => '请输入正确的联盟PID！'];
             }
             // 存储
-            $insert = ['pid'=>$pid, 'name'=>$name];
+            $insert = ['pid' => $pid, 'name' => $name];
             $config = DB::table('daidai_config')->where('pid', $pid)->first();
-            if ($config){
+            if ($config) {
                 $insert['updated_at'] = Carbon::now();
                 $status = DB::table('daidai_config')->where('id', $config->id)->update($insert);
-            }else{
+            } else {
                 $insert['created_at'] = $insert['updated_at'] = Carbon::now();
                 $status = DB::table('daidai_config')->insert($insert);
             }
-            if (false === $status){
-                return response()->json(['status'=>0, 'info'=>'服务器异常，稍后再试！']);
+            if (false === $status) {
+                return response()->json(['status' => 0, 'info' => '服务器异常，稍后再试！']);
             }
-            return response()->json(['status'=>1, 'info'=>'保存成功！']);
+            return response()->json(['status' => 1, 'info' => '保存成功！']);
         } else {
             return view('daidai.setConfig');
         }
@@ -356,29 +357,177 @@ class DaidaiController extends BaseController
      */
     public function getHighRateById($itemid, $pid, $activityid = '')
     {
-        $arrConfig = ['312490106'=>'tkmai3', '353600165'=>'tkcb4'];
+        $arrConfig = ['312490106' => 'tkmai3', '353600165' => 'tkcb4'];
         $arrPid = explode('_', $pid);
         $request_url = 'http://v2.api.haodanku.com/ratesurl/ratesurl';
         $request_data['apikey'] = 'buybuypignull';
         $request_data['itemid'] = $itemid;
         $request_data['activityid'] = $activityid;
-        if (isset($arrConfig[$arrPid[1]]) && $arrConfig[$arrPid[1]]){
+        if (isset($arrConfig[$arrPid[1]]) && $arrConfig[$arrPid[1]]) {
             $request_data['pid'] = $pid;
             $request_data['tb_name'] = $arrConfig[$arrPid[1]];
-        }else{ // 默认配置
+        } else { // 默认配置
             $request_data['pid'] = 'mm_312490106_356400025_99534050095';
             $request_data['tb_name'] = 'tkmai3';
         }
 
         $res = http($request_url, $request_data, 'POST');
         $result = json_decode($res, true);
-        if (isset($result['data']['item_url'])){
+        if (isset($result['data']['item_url'])) {
 //        if (isset($result['data']['coupon_click_url'])){
 //            return $result['data']['coupon_click_url'] ?: $result['data']['item_url'];
             return $result['data']['item_url'];
-        }else{
+        } else {
             return '';
         }
     }
 
+    /**
+     * 登录
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    function login(Request $request)
+    {
+        if ($request->method() == 'POST') {
+            $username = trim($request->get('username'));
+            $password = $request->get('password');
+
+            if (!$username || !$password) {
+                return response()->json(['status' => 0, 'info' => '用户名或密码不能为空']);
+            }
+            $user = DB::table('daidai_user')->where('username', $username)->first();
+            if (!$user->id) {
+                return response()->json(['status' => 0, 'info' => '用户名不存在，请注册后再登陆！']);
+            }
+            if ($user->status != 1) {
+                return response()->json(['status' => 0, 'info' => '账号异常，可以联系管理员！']);
+            }
+            if ($user->password != md5(md5('url' . $password))) {
+                return response()->json(['status' => 0, 'info' => '密码错误！']);
+            }
+            setcookie('daidai_uid', $user->id, time() + 7 * 24 * 3600, '/');
+            setcookie('daidai_username', $user->username, time() + 7 * 24 * 3600, '/');
+            setcookie('daidai_pid', $user->pid, time() + 7 * 24 * 3600, '/');
+
+            return response()->json(['status' => 1, 'info' => 'success']);
+        } else {
+            return view('daidai.login');
+        }
+    }
+
+    /**
+     * 注册
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\JsonResponse|\Illuminate\View\View
+     */
+    function register(Request $request)
+    {
+        if ($request->method() == 'POST') {
+            $username = trim($request->get('username'));
+            $password = $request->get('password');
+
+            $result = $this->insertUser($username, $password);
+            if (!$result['status']){
+                return $result;
+            }
+
+            setcookie('daidai_uid', $result['insertId'] ?? 0, time() + 7 * 24 * 3600, '/');
+            setcookie('daidai_username', $username, time() + 7 * 24 * 3600, '/');
+            setcookie('daidai_pid', 1, time() + 7 * 24 * 3600, '/');
+
+            return response()->json(['status' => 1, 'info' => 'success']);
+        } else {
+            return view('daidai.register');
+        }
+    }
+
+    /**
+     * 退出
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function out()
+    {
+        setcookie('daidai_uid', '', time() - 100, '/');
+        setcookie('daidai_username', '', time() - 100, '/');
+        setcookie('daidai_pid', '', time() - 100, '/');
+
+        return $this->success('退出成功！');
+    }
+
+    /**
+     * 添加新用户
+     * @param Request $request
+     * @return array
+     */
+    function addUser(Request $request)
+    {
+        if ($request->method() == 'POST'){
+            $username = trim($request->get('username'));
+            $password = $request->get('password');
+
+            return  $this->insertUser($username, $password);
+        }else{
+            return view('daidai.addUser');
+        }
+    }
+
+    function insertUser($username, $password)
+    {
+        if (!$username || !$password) {
+            return ['status' => 0, 'info' => '用户名或密码不能为空！'];
+        }
+
+        $user = DB::table('daidai_user')->where('username', $username)->first();
+        if ($user->id) {
+            return ['status' => 0, 'info' => '用户名已存在！！'];
+        }
+
+        $insertId = DB::table('daidai_user')->insertGetId([
+            'username' => $username,
+            'password' => md5(md5('url' . $password)),
+            'status' => 1,
+            'pid' => intval($_COOKIE['daidai_uid']),
+            'created_at' => date('Y-m-d H:i:s'),
+            'updated_at' => date('Y-m-d H:i:s'),
+        ]);
+
+        if (!$insertId) {
+            return ['status' => 0, 'info' => '系统异常，稍后再试！！'];
+        }
+        return ['status' => 1, 'info' => '操作成功！', 'insertId'=>$insertId];
+    }
+
+    /**
+     * 用户列表
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    function userList()
+    {
+        if (!isset($_COOKIE['daidai_uid'])){
+            header('location:/');die;
+        }
+        $userId = $_COOKIE['daidai_uid'] ?? 0;
+        $data = DB::table('daidai_user')->select('username', 'status','created_at','updated_at')
+            ->where('status', 1)->where('pid', $userId)->get();
+        return view('daidai.userList', ['m' => 'user', 'data' => $data]);
+    }
+
+    /**
+     * 删除用户
+     * @param Request $request
+     */
+    function delUser(Request $request)
+    {
+        $id = intval($request->get('id'));
+        $record = DB::table('daidai_user')->where('status', 1)->find($id);
+        if (isset($record->id) && $record->id) {
+            if ($_COOKIE['daidai_uid'] != $record->pid) {
+                return ['status' => 0, 'info' => '该用户不是你创建，无法删除'];
+            }
+            $updateStatus = DB::table('daidai_user')->where('id', $id)->update(['status' => 0, 'updated_at' => date('Y-m-d H:i:s')]);
+            if ($updateStatus !== false) {
+                return ['status' => 1, 'info' => '删除成功！'];
+            }
+        }
+        return ['status' => 0, 'info' => '操作失败，请稍后再试！！'];
+    }
 }
