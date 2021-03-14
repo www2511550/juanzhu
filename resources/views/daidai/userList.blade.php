@@ -30,7 +30,7 @@
                 <td>{{ $vo->status == 1 ? '正常' : '异常' }}</td>
                 <td>{{ $vo->created_at }}</td>
                 <td>{{ $vo->updated_at ?: '--' }}</td>
-                <td><a class="layui-btn layui-btn-danger layui-btn-xs a-del" data-id={{ $vo->id }} lay-event="del">删除</a></td>
+                <td><a class="layui-btn layui-btn-danger layui-btn-xs a-del" onclick="delUser({{$vo->id}})">删除</a></td>
             </tr>
         @endforeach
         @endif
@@ -41,18 +41,22 @@
 @include('daidai.public.footer')
 
 <script>
-layui.use('table', function(){
-  $('a.a-del').click(function(e){
-        layer.confirm('确定删除该用户？', function(index){
-            var id = $(e).attr('data-id');
-            $.post('/dd/del-user', {id:id}, function(result){
-                if(!result.status){
-                    layer.msg(result.info)
-                }
-            })
-            layer.close(index);
-      });
-  });
-});
+
+
+function delUser(uid){
+    if(confirm('确定删除该用户吗？')){
+        $.post('/dd/del-user', {id:uid}, function(result){
+            if(!result.status){
+                alert(result.info);
+            }else{
+                layui.use('layer', function(){
+                  var layer = layui.layer;
+                  layer.msg('删除成功！');
+                });
+            }
+        })
+
+    }
+}
 </script>
 

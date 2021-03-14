@@ -487,7 +487,6 @@ class DaidaiController extends BaseController
             'status' => 1,
             'pid' => intval($_COOKIE['daidai_uid']),
             'created_at' => date('Y-m-d H:i:s'),
-            'updated_at' => date('Y-m-d H:i:s'),
         ]);
 
         if (!$insertId) {
@@ -506,7 +505,7 @@ class DaidaiController extends BaseController
             header('location:/');die;
         }
         $userId = $_COOKIE['daidai_uid'] ?? 0;
-        $data = DB::table('daidai_user')->select('username', 'status','created_at','updated_at')
+        $data = DB::table('daidai_user')->select('id','username', 'status','created_at','updated_at')
             ->where('status', 1)->where('pid', $userId)->get();
         return view('daidai.userList', ['m' => 'user', 'data' => $data]);
     }
