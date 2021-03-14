@@ -64,7 +64,7 @@
             <button type="submit" lay-submit lay-filter="sub" class="layui-btn">注册</button>
         </div>
         <hr style="width: 85%" />
-        <p style="width: 85%"><a href="/tool/login" class="fl">已有账号？立即登录</a>
+        <p style="width: 85%"><a href="/dd/login" class="fl">已有账号？立即登录</a>
             {{--<a href="javascript:;" class="fr">忘记密码？</a>--}}
         </p>
     </form>
@@ -83,7 +83,7 @@
 
             //alert(user);
             $.ajax({
-                url:'/tool/register',
+                url:'/dd/register',
                 type:'post',
                 dataType:'json',
                 data:{user:user},
@@ -134,7 +134,7 @@
         //添加表单监听事件,提交注册信息
         form.on('submit(sub)', function() {
             $.ajax({
-                url:'/tool/register',
+                url:'/dd/register',
                 type:'post',
                 dataType:'json',
                 data:{
@@ -144,7 +144,7 @@
                 success:function(data){
                     if (data.status == 1) {
                         layer.msg('注册成功');
-                        location.href = "/tool/weibo-to-taobao";
+                        location.href = "/";
                     }else {
                         layer.msg(data.info);
                     }

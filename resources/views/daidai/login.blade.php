@@ -31,7 +31,7 @@
         <div class="layui-input-inline">
             <button type="button" class="layui-btn layui-btn-normal">微信登录</button>
         </div>-->
-        <p><a href="/tool/register" class="fl">立即注册</a>
+        <p><a href="/dd/register" class="fl">立即注册</a>
             {{--<a href="javascript:;" class="fr">忘记密码？</a>--}}
         </p>
     </form>
@@ -48,13 +48,13 @@
         form.on('submit(login)',function (data) {
             console.log(data.field);
             $.ajax({
-                url:'/tool/login',
+                url:'/dd/login',
                 data:data.field,
                 dataType:'json',
                 type:'post',
                 success:function (data) {
                     if (data.status == 1){
-                        location.href = "/tool/weibo-to-taobao";
+                        location.href = "/";
                     }else{
                         layer.msg(data.info);
                     }
