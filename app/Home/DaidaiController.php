@@ -19,6 +19,17 @@ use Illuminate\Support\Facades\DB;
 
 class DaidaiController extends BaseController
 {
+    public function __construct()
+    {
+        parent::__construct();
+        if (!(isset($_COOKIE['daidai_uid']) && $_COOKIE['daidai_uid'])){
+            $arrAction = request()->route()->getAction();
+            if (!(isset($arrAction['as']) && in_array($arrAction['as'], ['dd.login', 'dd.register', 'dd.out']))){
+                header('location:/dd/login');die;
+            }
+        }
+    }
+
     /**
      * 首页
      */

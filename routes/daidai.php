@@ -41,9 +41,9 @@ Route::group(['namespace' => 'Home'], function () {
 
     // config设置
     Route::any('/admin', 'DaidaiController@setConfig');
-    Route::any('/dd/login', 'DaidaiController@login');
-    Route::any('/dd/register', 'DaidaiController@register');
-    Route::any('/dd/out', 'DaidaiController@out');
+    Route::any('/dd/login', 'DaidaiController@login')->name('dd.login');
+    Route::any('/dd/register', 'DaidaiController@register')->name('dd.register');
+    Route::any('/dd/out', 'DaidaiController@out')->name('dd.out');
     Route::any('/dd/user-list', 'DaidaiController@userList');
     Route::any('/dd/add-user', 'DaidaiController@addUser');
     Route::post('/dd/del-user', 'DaidaiController@delUser');
