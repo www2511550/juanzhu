@@ -12,7 +12,7 @@
 </head>
 
 <body class="layui-layout-body">
-<img src="/images/tool/toolma.jpg" alt="嘿淘工具交流群" style="width: 200px;height: auto;z-index:9999999;position: absolute;right: 10px;top: 110px;">
+<img src="http://tk.2yhq.top/toolma.jpg" alt="嘿淘工具交流群" style="width: 200px;height: auto;z-index:9999999;position: absolute;right: 10px;top: 110px;">
 <div class="layui-layout layui-layout-admin">
     <div class="layui-header">
         <div class="layui-logo"><a href="/" style="color: #009688;">淘宝客API开放平台</a></div>
