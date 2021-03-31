@@ -40,7 +40,7 @@ class DaidaiController extends BaseController
         } else {
             // pid配置
             $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
-            return is_mobile() ? view('daidai.wap.oneLink', ['config' => $config, 'action' => 'oneLink']) : view('daidai.index');
+            return is_mobile() ? view('daidai.wap.moreLink', ['config' => $config, 'action' => 'moreLink']) : view('daidai.index');
         }
 
     }
