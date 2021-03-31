@@ -38,7 +38,9 @@ class DaidaiController extends BaseController
         if ($request->method() == 'POST') {
 
         } else {
-            return is_mobile() ? view('daidai.wap.index', ['action' => 'index']) : view('daidai.index');
+            // pid配置
+            $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
+            return is_mobile() ? view('daidai.wap.oneLink', ['config' => $config, 'action' => 'oneLink']) : view('daidai.index');
         }
 
     }

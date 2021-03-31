@@ -11,7 +11,7 @@
             <textarea name="content" id="content" placeholder="请一行一个链接...." class="form-control" style="height: 160px;"></textarea>
         </div>
         <div class="form-group">
-            <select name="pid" lay-verify="required" style="display: block;width: 350px;height: 38px;border: 1px solid #dedede;">
+            <select name="pid" lay-verify="required" style="display: none;width: 350px;height: 38px;border: 1px solid #dedede;">
                 @if($config)
                     @foreach($config as $vo)
                         <option value="{{ $vo->pid }}">pid-{{ $vo->name.'-'.$vo->pid }}</option>

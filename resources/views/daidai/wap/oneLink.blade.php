@@ -11,7 +11,7 @@
             <input type="text" id="content" class="form-control" id="longUrl" placeholder="请输入链接..." >
         </div>
         <div class="form-group">
-            <select name="pid" lay-verify="required" style="display: block;width: 350px;height: 38px;border: 1px solid #dedede;">
+            <select name="pid" lay-verify="required" style="display: none;width: 350px;height: 38px;border: 1px solid #dedede;">
                 @if($config)
                     @foreach($config as $vo)
                         <option value="{{ $vo->pid }}">pid-{{ $vo->name.'-'.$vo->pid }}</option>
