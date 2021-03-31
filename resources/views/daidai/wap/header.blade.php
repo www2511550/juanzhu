@@ -20,5 +20,7 @@
 <div class="btn-group" role="group" style="width: 100%">
     <button type="button" class="btn {{ $action=='oneLink' ? 'btn-primary' : 'btn-default' }}" onclick="window.location='/dd/one-link'" style="width: 33.3%">单链接转换</button>
     <button type="button" class="btn {{ $action=='moreLink' ? 'btn-primary' : 'btn-default' }}" onclick="window.location='/dd/more-link'" style="width: 33.3%">批量转链接</button>
+    @if(isset($_COOKIE['daidai_pid']) && $_COOKIE['daidai_pid'] == 0)
     <button type="button" class="btn {{ $action=='weibo' ? 'btn-primary' : 'btn-default' }}" onclick="window.location='/dd/weibo-to-taobao'" style="width: 33.3%">微博跳淘宝</button>
+    @endif
 </div>
