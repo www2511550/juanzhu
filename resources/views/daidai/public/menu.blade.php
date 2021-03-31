@@ -7,9 +7,11 @@
                 <dl class="layui-nav-child">
                     <dd><a href="/dd/one-link">单链接转换</a></dd>
                     <dd><a href="/dd/more-link">批量转链接</a></dd>
+                    @if(isset($_COOKIE['daidai_pid']) && $_COOKIE['daidai_pid'] == 0)
                     <dd><a href="/dd/weibo-to-taobao">微博跳淘宝</a></dd>
                     <dd><a href="/dd/short-url">淘宝短链接</a></dd>
                     <dd><a href="/dd/tkl-create">淘口令生成</a></dd>
+                    @endif
                 </dl>
             </li>
             @if(isset($_COOKIE['daidai_pid']) && $_COOKIE['daidai_pid'] == 0)
