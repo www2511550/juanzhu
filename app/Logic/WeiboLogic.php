@@ -124,7 +124,7 @@ class WeiboLogic{
         ];
         $result = http($url, $params);
         $data = json_decode($result, true);
-        $wb_short = $data['code'] == 0 ? $data['data']['short_url'] : '';
+        $wb_short = isset($data['data']['short_url']) && $data['data']['short_url'] ? $data['data']['short_url'] : '';
 
         // 微博不能用，切换更换为百度短链接
         if (!$wb_short){
