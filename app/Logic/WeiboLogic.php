@@ -84,21 +84,11 @@ class WeiboLogic{
 
         $tcn = $this->tcn($long_url);
         if (!$tcn) {
-            // 官方文档 https://3w.cn/api.html
-            $url = 'http://api.3w.cn/api.htm';
-            $params = [
-                'url' => $long_url,
-                'key' => '5fd101c16926889baf76d4727c@3b3b6f5efc764d3dc514cd37ba52a710',
-                'domain' => '4',
-                'expireDate' => date('Y-m-d H:i:s',strtotime('+1 year')), // 永久
-            ];
-            $ft12 = http($url, $params);
-            try {
-                Log::info('wbToApp:'.json_encode(['url'=>$url, 'wb_short'=>$tcn]));
-            } catch (\Exception $re) {
-                // noop - there is no hasPrototype method
+            // 二次调用
+            $result =  $this->baiduShortUrl($long_url);
+            if ($result['Code'] === 0){
+                $tcn = $result['ShortUrl'];
             }
-            return $ft12 ?: '';
         }
 
         try {
