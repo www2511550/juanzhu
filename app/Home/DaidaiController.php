@@ -54,51 +54,63 @@ class DaidaiController extends BaseController
             $url = trim($request->get('content'));
             $pid = $request->get('pid');
 //            $tbkSession = $request->get('tbk_session', '70000100e0397191e7b27a9266f8ecffc79581814c1003e4d0ea76b5aa8e0576d412c172652123108');
-
-            // 判断链接所属，只需要微博仿屏蔽，不需要转换
-            $wb_short_url = '';
-            $weiboLogic = new WeiboLogic();
-            if (strpos($url, 'jd.com')) {
-                $wb_short_url = $weiboLogic->wbToApp($url, 'jd');
-            } elseif (strpos($url, 'pinduoduo.com')) {
-                $wb_short_url = $weiboLogic->wbToApp($url, 'pdd');
-            } elseif (strpos($url, 'taobao.com') || strpos($url, 'tb.cn')) {
-                $wb_short_url = $weiboLogic->wbToApp($url, 'tb');
-            }
-
-            if ($wb_short_url) {
-                return ['status' => 1, 'data' => $wb_short_url];
-            }
-            return ['status' => 0, 'info' => '只支持jd.com，pinduoduo.com和taobo.com链接'];
-
-
-//            $params = ['url'=>$url, 'pid'=>$pid, 'from'=>'daidai'];
+//            // 判断链接所属，只需要微博仿屏蔽，不需要转换
+//            $wb_short_url = '';
 //            $weiboLogic = new WeiboLogic();
-//            if (strpos($url, 'pinduoduo.com')){
-//                // 检测pid是否选择正确
-//                if (count(explode('_', $pid)) != 2){
-//                    return ['status'=>0, 'data'=>'拼多多pid选择错误！'];
-//                }
-//                $request_url = 'http://tk.2yhq.top/api/tbk/pdd-goods';
-//                $result = json_decode(http($request_url, $params), true);
-//                if ($result['status']){
-//                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'pdd');
-//                    return ['status'=>1, 'data'=>$wb_short_url];
-//                }
-//                return $result;
-//            }elseif(strpos($url, 'jd.com')){
-//                // 检测pid是否选择正确
-//                if (count(explode('_', $pid)) != 1){
-//                    return ['status'=>0, 'data'=>'京东pid选择错误！'];
-//                }
-//                $request_url = 'http://tk.2yhq.top/api/tbk/jd-goods';
-//                $result = json_decode(http($request_url, $params), true);
-//                if ($result['status']){
-//                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'jd');
-//                    return ['status'=>1, 'data'=>$wb_short_url];
-//                }
-//                return $result;
+//            if (strpos($url, 'jd.com')) {
+//                $wb_short_url = $weiboLogic->wbToApp($url, 'jd');
+//            } elseif (strpos($url, 'pinduoduo.com')) {
+//                $wb_short_url = $weiboLogic->wbToApp($url, 'pdd');
+//            } elseif (strpos($url, 'taobao.com') || strpos($url, 'tb.cn')) {
+//                $wb_short_url = $weiboLogic->wbToApp($url, 'tb');
 //            }
+//
+//            if ($wb_short_url) {
+//                return ['status' => 1, 'data' => $wb_short_url];
+//            }
+//            return ['status' => 0, 'info' => '只支持jd.com，pinduoduo.com和taobo.com链接'];
+
+            // 呆呆好单裤授权转链接口，京东和拼多多
+            $apikey = 'buybuypignull';
+//            $weiboLogic = new WeiboLogic();
+            if (strpos($url, 'pinduoduo.com')){
+                // 检测pid是否选择正确
+                if (count(explode('_', $pid)) != 2){
+                    return ['status'=>0, 'info'=>'拼多多pid选择错误！'];
+                }
+                // 短链接解析
+                $headers = get_headers($url, true);
+                $location = $headers['Location'];
+                $arrLocaiton = explode('?', $location);
+                parse_str($arrLocaiton[1], $urlParams);
+
+                $params = ['apikey'=>$apikey, 'pid' =>$pid, 'goods_id'=>$urlParams['goods_id'], 'goods_sign'=>$urlParams['goods_sign']];
+                $request_url = 'http://v2.api.haodanku.com/get_pdditems_link';
+                $result = json_decode(http($request_url, $params, 'POST'), true);
+                if ($result['code'] == 200){
+//                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'pdd');
+                    // 暂时不要微博跳转功能
+                    $wb_short_url = $result['data']['mobile_short_url'];
+                    return ['status'=>1, 'data'=>$wb_short_url];
+                }
+                return ['status'=>0, 'info'=>$result['msg'] ?? '转换失败，稍后再试！'];
+            }elseif(strpos($url, 'jd.com')){
+                // 检测pid是否选择正确
+                if (count(explode('_', $pid)) != 1){
+                    return ['status'=>0, 'info'=>'京东pid选择错误！'];
+                }
+                $params = ['url'=>$url, 'pid'=>$pid, 'from'=>'daidai'];
+                $request_url = 'http://tk.2yhq.top/api/tbk/jd-goods';
+                $result = json_decode(http($request_url, $params), true);
+                if ($result['status']){
+//                    $wb_short_url = $weiboLogic->wbToApp($result['data']['shortUrl'], 'jd');
+                    // 暂时不要微博跳转功能
+                    $wb_short_url = $result['data']['shortUrl'];
+                    return ['status'=>1, 'data'=>$wb_short_url];
+                }
+                return $result;
+            }
+            return ['status' => 0, 'info' => '只支持jd.com和pinduoduo.com等链接'];
         } else {
             // pid配置
             $config = DB::table('daidai_config')->where('status', 1)->orderBy('id', 'desc')->get();
@@ -140,10 +152,11 @@ class DaidaiController extends BaseController
                 // 新版20210305
                 if (strpos($v, 'jd.com')) {
                     $strUrl = $weiboLogic->wbToApp($v, 'jd');
+
                 } elseif (strpos($v, 'pinduoduo.com')) {
                     $strUrl = $weiboLogic->wbToApp($v, 'pdd');
                 } elseif (strpos($v, 'taobao.com') || strpos($v, 'tb.cn')) {
-                    $strUrl = $weiboLogic->wbToApp($v, 'tb');
+//                    $strUrl = $weiboLogic->wbToApp($v, 'tb'); // 淘宝的屏蔽
                 }
                 $_tmp[] = $strUrl;
                 $str = $replaceOnce($tmp[0] . $v, '', $str);
