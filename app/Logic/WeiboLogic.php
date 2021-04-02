@@ -84,17 +84,17 @@ class WeiboLogic{
 
         $tcn = $this->tcn($long_url);
         if (!$tcn) {
-            // 二次调用
-            $result =  $this->baiduShortUrl($long_url);
-            if ($result['Code'] === 0){
-                $tcn = $result['ShortUrl'];
-            }
-        }
-
-        try {
-            Log::info('wbToApp:'.json_encode(['url'=>$url, 'wb_short'=>$tcn]));
-        } catch (\Exception $re) {
-            // noop - there is no hasPrototype method
+            // 官方文档 https://home.suowo.cn/ucenter/api.htm
+            $url = 'http://api.suowo.cn/api.htm';
+            $params = [
+                'url' => $long_url,
+                'key' => '6010ce2f2782f5059f075384@bd3082395d9bc6c552bf1c3e7bf27170',
+                'format' => 'json',
+                'domain' => '5',
+                'expireDate' => date('Y-m-d',strtotime('+1 year')), // 永久
+            ];
+            $ft12 = json_decode(http($url, $params), true);
+            return $ft12['url'] ?: '';
         }
 
         return $tcn;
@@ -116,13 +116,13 @@ class WeiboLogic{
         $data = json_decode($result, true);
         $wb_short = isset($data['data']['short_url']) && $data['data']['short_url'] ? $data['data']['short_url'] : '';
 
-        // 微博不能用，切换更换为百度短链接
-        if (!$wb_short){
-            $result =  $this->baiduShortUrl($long_url);
-            if ($result['Code'] === 0){
-                $wb_short = $result['ShortUrl'];
-            }
-        }
+        // 微博不能用，切换更换为百度短链接（欠费暂停使用）
+//        if (!$wb_short){
+//            $result =  $this->baiduShortUrl($long_url);
+//            if ($result['Code'] === 0){
+//                $wb_short = $result['ShortUrl'];
+//            }
+//        }
 
         return $wb_short;
     }
