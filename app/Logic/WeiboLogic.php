@@ -74,13 +74,23 @@ class WeiboLogic{
     public function wbToApp($url, $type)
     {
         if ($type == 'jd') {
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
-//            $long_url = 'https://h5.m.jd.com/dev/RLVegkgjdNJoM4Y1WsvAnKLD7Qw/index.html?appurl='.urlencode($url);
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
+            $long_url = 'https://h5.m.jd.com/dev/RLVegkgjdNJoM4Y1WsvAnKLD7Qw/index.html?appurl='.urlencode($url);
         } elseif ($type == 'pdd') {
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url=' . urlencode($url)))) . '&allowRedirect=1';
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url=' . urlencode($url)))) . '&allowRedirect=1';
+            // 拼多多跳转改版 2021-4-19
+            $headers = get_headers($url, true);
+            $location = $headers['Location'];
+            $arrLocaiton = explode('?', $location);
+            parse_str($arrLocaiton[1], $urlParams);
+            $mainStr = 'goods_id='.$urlParams['goods_id'].'&pid='.$urlParams['pid'].'&goods_sign='.$urlParams['goods_sign'];
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=pinduoduo://com.xunmeng.pinduoduo/duo_coupon_landing.html?'. $mainStr .'&duoduo_type=2&refer_page_name=duo_coupon_landing&allowRedirect=1';
+//        pre($long_url);die;
         } else {
             $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url)))) . '&allowRedirect=1';
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url).'&url=sinaweibo://browser?sinainternalbrowser=&url='.urlencode($url)))) . '&allowRedirect=1&disable_interception=1&disable_sinaurl=1&allowRedirect=1&show_type=2&allowRedirect=1';
         }
+
 
         $tcn = $this->tcn($long_url);
         if (!$tcn) {
@@ -105,24 +115,29 @@ class WeiboLogic{
      */
     public function tcn($long_url)
     {
-        // 新浪微博短链接
-        $url = 'http://www.f4cklangzi.cn/api/create.html';
-        $params = [
-            'original_url' => $long_url,
-            'api_key' => '72188a037fddc44b59af79e360dfdc6d',
-            'mode' => 3,
-        ];
-        $result = http($url, $params);
-        $data = json_decode($result, true);
-        $wb_short = isset($data['data']['short_url']) && $data['data']['short_url'] ? $data['data']['short_url'] : '';
+        $wb_short = '';
+        try{
+            // 新浪微博短链接
+            $url = 'http://www.f4cklangzi.cn/api/create.html';
+            $params = [
+                'original_url' => $long_url,
+                'api_key' => '72188a037fddc44b59af79e360dfdc6d',
+                'mode' => 3,
+            ];
+            $result = http($url, $params);
+            $data = json_decode($result, true);
+            $wb_short = isset($data['data']['short_url']) && $data['data']['short_url'] ? $data['data']['short_url'] : '';
 
-        // 微博不能用，切换更换为百度短链接（欠费暂停使用）
+            // 微博不能用，切换更换为百度短链接（欠费暂停使用）
 //        if (!$wb_short){
 //            $result =  $this->baiduShortUrl($long_url);
 //            if ($result['Code'] === 0){
 //                $wb_short = $result['ShortUrl'];
 //            }
 //        }
+        }catch (\Exception $e){
+
+        }
 
         return $wb_short;
     }
