@@ -75,7 +75,8 @@ class WeiboLogic{
     {
         if ($type == 'jd') {
 //            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params={"category":"jump","des":"m","url":"' . $url . '"}'))) . '&allowRedirect=1';
-            $long_url = 'https://h5.m.jd.com/dev/RLVegkgjdNJoM4Y1WsvAnKLD7Qw/index.html?appurl='.urlencode($url);
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('openapp.jdmobile://virtual?params='.urlencode('{"category":"jump","des":"m","url":"' . $url . '"}')))) . '&allowRedirect=1';
+//            $long_url = 'https://h5.m.jd.com/dev/RLVegkgjdNJoM4Y1WsvAnKLD7Qw/index.html?appurl='.urlencode($url);
         } elseif ($type == 'pdd') {
 //            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('pinduoduo://com.xunmeng.pinduoduo/app.html?url=' . urlencode($url)))) . '&allowRedirect=1';
             // 拼多多跳转改版 2021-4-19
@@ -85,7 +86,6 @@ class WeiboLogic{
             parse_str($arrLocaiton[1], $urlParams);
             $mainStr = 'goods_id='.$urlParams['goods_id'].'&pid='.$urlParams['pid'].'&goods_sign='.$urlParams['goods_sign'];
             $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=pinduoduo://com.xunmeng.pinduoduo/duo_coupon_landing.html?'. $mainStr .'&duoduo_type=2&refer_page_name=duo_coupon_landing&allowRedirect=1';
-//        pre($long_url);die;
         } else {
             $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url)))) . '&allowRedirect=1';
 //            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url).'&url=sinaweibo://browser?sinainternalbrowser=&url='.urlencode($url)))) . '&allowRedirect=1&disable_interception=1&disable_sinaurl=1&allowRedirect=1&show_type=2&allowRedirect=1';
@@ -100,7 +100,7 @@ class WeiboLogic{
                 'url' => $long_url,
                 'key' => '6010ce2f2782f5059f075384@bd3082395d9bc6c552bf1c3e7bf27170',
                 'format' => 'json',
-                'domain' => '5',
+                'domain' => '4',
                 'expireDate' => date('Y-m-d',strtotime('+1 year')), // 永久
             ];
             $ft12 = json_decode(http($url, $params), true);
