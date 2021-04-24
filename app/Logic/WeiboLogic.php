@@ -120,7 +120,7 @@ class WeiboLogic{
         // sinaurl接口
         $url = 'http://vip.kakuapi.com/sinaurl-1.php';
         $params = [
-            'domain' => $long_url,
+            'domain' => urlencode($long_url),
         ];
         $arrHeader = [
             'Host' => 'vip.kakuapi.com',
@@ -128,15 +128,15 @@ class WeiboLogic{
             'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
             '' => '',
         ];
-//        try {
-//            $result = json_decode(http($url, $params, 'POST', $arrHeader), true);
-//            if (isset($result['key']) && $result['key']) {
-//                $wb_short = $result['key'];
-//            }
-//        } catch (\Exception $e) {
-//
-//        }
-//        if ($wb_short) return $wb_short;
+        try {
+            $result = json_decode(http($url, $params, 'POST', $arrHeader), true);
+            if (isset($result['key']) && $result['key']) {
+                $wb_short = $result['key'];
+            }
+        } catch (\Exception $e) {
+
+        }
+        if ($wb_short) return $wb_short;
 
 
         try{
