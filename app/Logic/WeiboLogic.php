@@ -92,15 +92,18 @@ class WeiboLogic{
         }
 
 
-        $tcn = $this->tcn($long_url);
+        $tcn = '';//$this->tcn($long_url);
         if (!$tcn) {
             // 官方文档 https://home.suowo.cn/ucenter/api.htm
             $url = 'http://api.suowo.cn/api.htm';
+            $arrDomain = [2, 3, 5];
+            shuffle($arrDomain);
+            $num = array_pop($arrDomain);
             $params = [
                 'url' => $long_url,
                 'key' => '6010ce2f2782f5059f075384@bd3082395d9bc6c552bf1c3e7bf27170',
                 'format' => 'json',
-                'domain' => '4',
+                'domain' => $num,
                 'expireDate' => date('Y-m-d',strtotime('+1 year')), // 永久
             ];
             $ft12 = json_decode(http($url, $params), true);
@@ -118,25 +121,25 @@ class WeiboLogic{
         $wb_short = '';
 
         // sinaurl接口
-        $url = 'http://vip.kakuapi.com/sinaurl-1.php';
-        $params = [
-            'domain' => urlencode($long_url),
-        ];
-        $arrHeader = [
-            'Host' => 'vip.kakuapi.com',
-            'Referer' => 'http://vip.kakuapi.com/sinaurl.php',
-            'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
-            '' => '',
-        ];
-        try {
-            $result = json_decode(http($url, $params, 'POST', $arrHeader), true);
-            if (isset($result['key']) && $result['key']) {
-                $wb_short = $result['key'];
-            }
-        } catch (\Exception $e) {
-
-        }
-        if ($wb_short) return $wb_short;
+//        $url = 'http://vip.kakuapi.com/sinaurl-1.php';
+//        $params = [
+//            'domain' => urlencode($long_url),
+//        ];
+//        $arrHeader = [
+//            'Host' => 'vip.kakuapi.com',
+//            'Referer' => 'http://vip.kakuapi.com/sinaurl.php',
+//            'User-Agent' => 'Mozilla/5.0 (iPhone; CPU iPhone OS 11_0 like Mac OS X) AppleWebKit/604.1.38 (KHTML, like Gecko) Version/11.0 Mobile/15A372 Safari/604.1',
+//            '' => '',
+//        ];
+//        try {
+//            $result = json_decode(http($url, $params, 'POST', $arrHeader), true);
+//            if (isset($result['key']) && strpos($result['key'], 'sinaurl.cn')) {
+//                $wb_short = $result['key'];
+//            }
+//        } catch (\Exception $e) {
+//
+//        }
+//        if ($wb_short) return $wb_short;
 
 
         try{
