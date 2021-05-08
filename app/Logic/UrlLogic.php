@@ -128,7 +128,8 @@ class UrlLogic
             }catch (\Exception $e){
                 $strTkl = '';
             }
-            $strUrl = $weiboLogic->shortUrl($base_short_url . $record->key, 'toTb');
+//            $strUrl = $weiboLogic->shortUrl($base_short_url . $record->key, 'toTb');
+            $strUrl = $weiboLogic->wbToApp($longUrl, 'tb');
             return [
                 'status' => 1,
                 'data' => [
@@ -180,7 +181,8 @@ class UrlLogic
             }catch (\Exception $e){
                 $strTkl = '';
             }
-            $strUrl = $weiboLogic->shortUrl($base_short_url . $strKey, 'toTb');
+//            $strUrl = $weiboLogic->shortUrl($base_short_url . $strKey, 'toTb');
+            $strUrl = $weiboLogic->wbToApp($longUrl, 'tb');
             return [
                 'status' => 1,
                 'data' => [
