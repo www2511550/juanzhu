@@ -214,8 +214,8 @@ class DaidaiController extends BaseController
             if (!($url = $request->get('url')) || strpos($request->get('url'), 'http') !== 0) {
                 return ['status' => 0, 'info' => '请输入正确的链接地址！'];
             }
-            if (!(strpos($url, 'uland.taobao.com') || strpos($url, 's.click.taobao.com'))) {
-                return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com和uland.taobao.com域名！']);
+            if (!(strpos($url, 'uland.taobao.com') || strpos($url, 's.click.taobao.com') || strpos($url, 'm.tb.cn'))) {
+                return response()->json(['status' => 0, 'info' => '目前只支持s.click.taobao.com、m.tb.cn和uland.taobao.com域名！']);
             }
             return $urlLogic->getShortUrl($url, 3);
         } else {
