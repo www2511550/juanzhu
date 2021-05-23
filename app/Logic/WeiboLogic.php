@@ -85,7 +85,11 @@ class WeiboLogic{
             $arrLocaiton = explode('?', $location);
             parse_str($arrLocaiton[1], $urlParams);
             $mainStr = 'goods_id='.$urlParams['goods_id'].'&pid='.$urlParams['pid'].'&goods_sign='.$urlParams['goods_sign'];
-            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=pinduoduo://com.xunmeng.pinduoduo/duo_coupon_landing.html?'. $mainStr .'&duoduo_type=2&refer_page_name=duo_coupon_landing&allowRedirect=1';
+//            $long_url = 'https://m.weibo.cn/feature/applink?scheme=sinaweibo://browser/close?scheme=sinaweibo://openadapp?scheme=pinduoduo://com.xunmeng.pinduoduo/duo_coupon_landing.html?'. $mainStr .'&duoduo_type=2&refer_page_name=duo_coupon_landing&allowRedirect=1';
+            $long_url = 'https://m.weibo.cn/feature/applink?scheme='
+                .urlencode('sinaweibo://openadapp?scheme='
+                .urlencode('pinduoduo://com.xunmeng.pinduoduo/duo_coupon_landing.html?'
+                        . $mainStr )).'&duoduo_type=2&refer_page_name=duo_coupon_landing&allowRedirect=1';
         } else {
             $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url)))) . '&allowRedirect=1';
 //            $long_url = 'https://m.weibo.cn/feature/applink?scheme=' . urlencode('sinaweibo://browser/close?scheme=' . urlencode('sinaweibo://openadapp?scheme=' . urlencode('tbopen://m.taobao.com/tbopen/index.html?h5Url=' . urlencode($url).'&url=sinaweibo://browser?sinainternalbrowser=&url='.urlencode($url)))) . '&allowRedirect=1&disable_interception=1&disable_sinaurl=1&allowRedirect=1&show_type=2&allowRedirect=1';
